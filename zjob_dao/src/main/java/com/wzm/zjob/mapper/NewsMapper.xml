@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzm.zjob.dao.NewsDao">
+    <resultMap id="NewsMap" type="News">
+        <id column="id" property="id"/>
+        <result column="news_title" property="newsTitle"/>
+        <result column="news_content" property="newsContent"/>
+        <result column="create_date" property="createDate"/>
+        <result column="news_status" property="newsStatus"/>
+        <association property="sysuser" javaType="Sysuser">
+            <id property="id" column="id"/>
+            <result property="loginName" column="login_name"/>
+            <result property="password" column="password"/>
+            <result property="isValid" column="is_valid"/>
+            <result property="createDate" column="create_date"/>
+        </association>
+    </resultMap>
+
+    <sql id="News_List">
+    id, create_user_id, news_title, news_content, create_date, news_status
+  </sql>
+    <select id="selectAll" resultMap="NewsMap">
+        select
+        n.id,n.news_title,n.news_content,n.create_date,n.news_status,s.id,s.login_name,s.password,s.is_valid,s.create_date
+        from news n
+        left join sysuser s
+	    on n.create_user_id=s.id
+    </select>
+
+    <select id="selectByTitle" resultType="News">
+        select
+        <include refid="News_List"/>
+        from news
+        where news_title = #{newsTitle}
+    </select>
+
+    <select id="selectByTitleAndId" resultType="News">
+        select
+        <include refid="News_List"/>
+        from news
+        where news_title = #{newsTitle}
+        and id &lt;&gt;  #{id}
+    </select>
+
+    <insert id="insert" parameterType="News">
+    insert into news (create_user_id, news_title,
+      news_content, create_date, news_status
+      )
+    values (#{sysuser.id}, #{newsTitle},
+      #{newsContent}, #{createDate}, #{newsStatus}
+      )
+  </insert>
+
+    <delete id="deleteById">
+        delete from news
+        where id = #{id}
+    </delete>
+
+    <update id="updateStatus">
+  update news
+        set news_status=#{newsStatus}
+        where id=#{id}
+
+    </update>
+
+    <select id="selectById" resultMap="NewsMap">
+        select
+        n.id,n.news_title,n.news_content,n.create_date,n.news_status,s.id,s.login_name,s.password,s.is_valid,s.create_date
+        from news n
+        left join sysuser s
+	    on n.create_user_id=s.id
+        where n.id = #{id}
+    </select>
+
+    <update id="update" parameterType="News">
+        update news
+        <set>
+
+            <if test="newsTitle != null">
+                news_title = #{newsTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="newsContent != null">
+                news_content = #{newsContent,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="newsStatus != null">
+                news_status = #{newsStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

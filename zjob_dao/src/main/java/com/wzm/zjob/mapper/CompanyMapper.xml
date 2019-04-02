@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzm.zjob.dao.CompanyDao">
+    <resultMap id="CompanyMap" type="com.wzm.zjob.entity.Company">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="company_email" jdbcType="VARCHAR" property="companyEmail"/>
+        <result column="company_logo" jdbcType="VARCHAR" property="companyLogo"/>
+        <result column="company_address" jdbcType="VARCHAR" property="companyAddress"/>
+        <result column="company_type" jdbcType="VARCHAR" property="companyType"/>
+        <result column="company_desc" jdbcType="VARCHAR" property="companyDesc"/>
+        <result column="company_phone" jdbcType="VARCHAR" property="companyPhone"/>
+        <result column="company_create_date" jdbcType="TIMESTAMP" property="companyCreateDate"/>
+        <result column="company_person" jdbcType="VARCHAR" property="companyPerson"/>
+        <result column="company_status" jdbcType="INTEGER" property="companyStatus"/>
+        <result column="position_num" jdbcType="INTEGER" property="positionNum"/>
+    </resultMap>
+
+    <sql id="Company_List">
+    id, company_name, password, company_email, company_logo, company_address, company_type, company_desc,
+    company_phone, company_create_date, company_person, company_status, position_num
+  </sql>
+    <select id="selectAll" resultMap="CompanyMap">
+        select
+        <include refid="Company_List"/>
+        from company
+    </select>
+    <insert id="insert" parameterType="com.wzm.zjob.entity.Company">
+        insert into company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="companyName != null">
+                company_name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="companyEmail != null">
+                company_email,
+            </if>
+            <if test="companyLogo != null">
+                company_logo,
+            </if>
+            <if test="companyAddress != null">
+                company_address,
+            </if>
+            <if test="companyType != null">
+                company_type,
+            </if>
+            <if test="companyDesc != null">
+                company_desc,
+            </if>
+            <if test="companyPhone != null">
+                company_phone,
+            </if>
+            <if test="companyCreateDate != null">
+                company_create_date,
+            </if>
+            <if test="companyPerson != null">
+                company_person,
+            </if>
+            <if test="companyStatus != null">
+                company_status,
+            </if>
+            <if test="positionNum != null">
+                position_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="companyEmail != null">
+                #{companyEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="companyLogo != null">
+                #{companyLogo,jdbcType=VARCHAR},
+            </if>
+            <if test="companyAddress != null">
+                #{companyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                #{companyType,jdbcType=VARCHAR},
+            </if>
+            <if test="companyDesc != null">
+                #{companyDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="companyPhone != null">
+                #{companyPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="companyCreateDate != null">
+                #{companyCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="companyPerson != null">
+                #{companyPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="companyStatus != null">
+                #{companyStatus,jdbcType=INTEGER},
+            </if>
+            <if test="positionNum != null">
+                #{positionNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectEnable" resultMap="CompanyMap">
+        select
+        <include refid="Company_List"/>
+        from company
+        where
+        company_status = #{valid}
+    </select>
+
+
+    <select id="selectByCompanyNameAndId" resultMap="CompanyMap">
+        select
+        <include refid="Company_List"/>
+        from company
+        <where>
+            <if test="companyName != null">
+                and company_name = #{companyName,jdbcType=VARCHAR}
+            </if>
+            <if test="id != null">
+                and id &lt;&gt; #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>

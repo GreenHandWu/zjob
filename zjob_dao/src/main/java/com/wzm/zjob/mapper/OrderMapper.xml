@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzm.zjob.dao.OrderDao">
+    <resultMap id="OrderMap" type="com.wzm.zjob.entity.Order">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="product_num" jdbcType="INTEGER" property="productNum" />
+        <result column="order_sum" jdbcType="DOUBLE" property="orderSum" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <association property="company" javaType="Company">
+            <id property="id" column="company_id"/>
+            <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        </association>
+        <association property="product" javaType="Product">
+            <id property="id" column="product_id"/>
+            <result column="product_name" jdbcType="VARCHAR" property="productName" />
+        </association>
+    </resultMap>
+    <sql id="Order_List">
+    id, company_id, product_id, product_num, order_sum, create_time
+  </sql>
+
+    <select id="selectAll" resultMap="OrderMap">
+        select
+        o.id, co.company_name, p.product_name, product_num, order_sum, create_time
+        from orders o,product p,company co
+        where o.company_id = co.id and o.product_id = p.id
+        order by o.create_time desc
+    </select>
+</mapper>

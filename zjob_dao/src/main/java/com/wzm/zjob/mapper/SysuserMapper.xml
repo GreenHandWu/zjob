@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzm.zjob.dao.SysuserDao">
+
+    <resultMap id="sysuserMap" type="com.wzm.zjob.entity.Sysuser">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="is_valid" jdbcType="INTEGER" property="isValid"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+    </resultMap>
+    <sql id="SysUser_List">
+    id,login_name,password,is_valid,create_date
+  </sql>
+    <!--后台登录  start-->
+    <select id="selectByLoginNameAndPassword" resultMap="sysuserMap">
+        select
+        <include refid="SysUser_List"/>
+        FROM
+        sysuser
+        where
+        login_name=#{loginName} and password=#{password} and is_valid=#{isValid}
+    </select>
+    <!--后台登录  end-->
+    <select id="selectAll" resultMap="sysuserMap">
+        select
+        <include refid="SysUser_List"/>
+        from sysuser
+    </select>
+    <select id="selectByLoginNameAndId" resultMap="sysuserMap">
+        select
+        <include refid="SysUser_List"/>
+        from sysuser
+        <where>
+            <if test="loginName != null">
+                and login_name = #{loginName,jdbcType=VARCHAR}
+            </if>
+            <if test="id != null">
+                and id &lt;&gt; #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="sysuserMap">
+        select
+        <include refid="SysUser_List" />
+        from sysuser
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="Sysuser">
+        insert into sysuser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="isValid != null">
+                is_valid,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="isValid != null">
+                #{isValid,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateStatus">
+        update sysuser
+        set is_valid = 1-is_valid
+        where id=#{id}
+    </update>
+
+
+    <update id="update" parameterType="Sysuser">
+        update sysuser
+        <set>
+            <if test="loginName != null">
+                login_name = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
