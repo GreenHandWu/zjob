@@ -25,7 +25,7 @@
             $('#company-image').on('change', function () {
                 $('#img').attr('src', window.URL.createObjectURL(this.files[0]));
             });
-            $('#com-image').on('change', function () {
+            $('#modifyCompanyLogo').on('change', function () {
                 $('#img2').attr('src', window.URL.createObjectURL(this.files[0]));
             });
             //服务器端接收消息
@@ -172,7 +172,7 @@
                 }
             });
 
-            $('#frmModifyNews').bootstrapValidator({
+            $('#frmModifyCompany').bootstrapValidator({
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
                     invalid: 'glyphicon glyphicon-remove',
@@ -180,32 +180,113 @@
 
                 },
                 fields: {
-                    newsTitle: {
+                    companyName: {
                         validators: {
                             notEmpty: {
-                                message: '标题不能为空'
+                                message: '公司名称不能为空'
                             },
                             remote: {
                                 //ajax后端校验该登录账号是否已经存在
-                                url: '${pageContext.request.contextPath}/backend/news/checkTitle'
+                                url: '${pageContext.request.contextPath}/backend/company/checkCompanyName',
+                                type: "post",
+                                dataType: "json",
+                                data: {
+                                    companyName: function () {
+                                        return $('#modifyCompanyName').val();
+                                    },
+                                    id: function () {
+                                        return $('#modifyCompanyId').val();
+                                    }
+                                }
+
                             }
                         }
                     },
-                    newsContent: {
+                    file: {
                         validators: {
                             notEmpty: {
-                                message: '内容不能为空'
+                                message: '请选择logo'
                             }
 
                         }
+                    },
+                    companyPerson: {
+                        validators: {
+                            notEmpty: {
+                                message: '企业法人不能为空'
+                            }
+
+                        }
+                    },
+                    companyEmail: {
+                        validators: {
+                            notEmpty: {
+                                message: '电子邮箱不能为空'
+                            },
+                            regexp: {
+                                regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+                                message: '请输入正确的邮箱地址'
+                            }
+
+                        }
+                    },
+                    companyAddress: {
+                        validators: {
+                            notEmpty: {
+                                message: '公司地址不能为空'
+                            }
+
+                        }
+                    },
+                    companyType: {
+                        validators: {
+                            notEmpty: {
+                                message: '公司类型不能为空'
+                            }
+
+                        }
+                    },
+                    companyDesc: {
+                        validators: {
+                            notEmpty: {
+                                message: '公司描述不能为空'
+                            }
+
+                        }
+                    },
+                    companyPhone: {
+                        validators: {
+                            notEmpty: {
+                                message: '公司电话不能为空'
+                            },
+                            regexp: {
+                                regexp: /^1\d{10}$/,
+                                message: '请输入正确的11位手机号'
+                            }
+
+                        }
+                    },
+                    companyCreateDate: {
+                        validators: {
+                            notEmpty: {
+                                message: '请选择公司创建日期'
+                            }
+                        }
                     }
-
                 }
-
             });
-
         });
-
+        function jsonDateFormat(jsonDate) {//json日期格式转换为正常格式
+            try {
+                var date = new Date(parseInt(jsonDate));
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                console.log(date.getFullYear() + "-" + month + "-" + day);
+                return date.getFullYear() + "-" + month + "-" + day;
+            } catch (ex) {
+                return "";
+            }
+        }
         //展示添加公司界面
         function showAddCompany() {
             $('#addCompany').modal('show');
@@ -220,36 +301,44 @@
                     //console.log(result);
                     //如果成功，将值写入修改模态框
                     if (result.status == 1) {
-                        $('#NewsNum').val(result.obj.id);
-                        $('#modifyNewsTitle').val(result.obj.newsTitle);
-                        $('#modifyNewsContent').val(result.obj.newsContent);
-                        $('#ModifyNews').modal('show');
+                        $('#modifyCompanyId').val(result.obj.id);
+                        $('#modifyCompanyName').val(result.obj.companyName);
+                       // $('#modifyCompanyLogo').val(result.obj.companyLogo);
+                        $('#modifyCompanyPerson').val(result.obj.companyPerson);
+                        $('#modifyCompanyEmail').val(result.obj.companyEmail);
+                        $('#modifyCompanyAddress').val(result.obj.companyAddress);
+                        $('#modifyCompanyType').val(result.obj.companyType);
+                        $('#modifyCompanyDesc').val(result.obj.companyDesc);
+                        $('#modifyCompanyPhone').val(result.obj.companyPhone);
+                        $('#modifyCompanyCreateDate').val(jsonDateFormat(result.obj.companyCreateDate));
+                        $('#ModifyCompany').modal('show');
                     }
                 });
         }
+
 
 
         //显示确认删除公司模态框
         function showDelModal(id) {
             //alert(id);
             //将id值存入删除模态框的隐藏域
-            $('#NewsId').val(id);
+            $('#CompanyId').val(id);
             //显示删除模态框
-            $('#delNews').modal('show');
+            $('#delCompany').modal('show');
 
         }
 
         //删除公司
         function deleteCompany() {
-            $.post('${pageContext.request.contextPath}/backend/news/deleteById',
-                {'id': $('#NewsId').val()}, function (result) {
+            $.post('${pageContext.request.contextPath}/backend/company/deleteById',
+                {'id': $('#CompanyId').val()}, function (result) {
                     if (result.status == 1) {
                         layer.msg(result.message, {
                             time: 2000,
                             skin: 'successMsg'
                         }, function () {
                             //返回当前页
-                            window.location.href = '${pageContext.request.contextPath}/backend/news/findAllByPage?pageNum=' +${data.pageNum};
+                            window.location.href = '${pageContext.request.contextPath}/backend/company/findAllByPage?pageNum=' +${data.pageNum};
                         });
 
                     } else {
@@ -282,8 +371,6 @@
                     }
                 });
         }
-
-
     </script>
 </head>
 
@@ -310,8 +397,8 @@
                     <th class="text-center">电话</th>
                     <th class="text-center">创建时间</th>
                     <th class="text-center">企业法人</th>
-                    <th class="text-center">状态</th>
                     <th class="text-center">可发布的职位数</th>
+                    <th class="text-center">状态</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -331,13 +418,13 @@
                         <td><fmt:formatDate value="${company.companyCreateDate}" pattern="yyyy-MM-dd"
                                             timeZone="UTC"/></td>
                         <td>${company.companyPerson}</td>
+                        <td>${company.positionNum}</td>
                         <td><c:if test="${company.companyStatus==1}">启用</c:if>
                             <c:if test="${company.companyStatus==0}">禁用</c:if>
                         </td>
-                        <td>${company.positionNum}</td>
                         <td class="text-center">
                             <input type="button" class="btn btn-warning btn-sm" value="修改"
-                                   onclick="showNewsModify(${company.id})">
+                                   onclick="showCompanyModify(${company.id})">
                             <input type="button" class="btn btn-warning btn-sm" value="删除"
                                    onclick="showDelModal(${company.id})">
                             <c:if test="${company.companyStatus==1}">
@@ -451,60 +538,109 @@
     </div>
 </div>
 <!-- 添加公司 end -->
-
 <!-- 修改公司 start -->
-<div class="modal fade" tabindex="-1" id="ModifyNews">
+<div class="modal fade" tabindex="-1" id="ModifyCompany">
     <!-- 窗口声明 -->
-    <form id="frmModifyNews">
-        <div class="modal-dialog modal-lg">
-            <!-- 内容声明 -->
-
+    <div class="modal-dialog modal-lg">
+        <!-- 内容声明 -->
+        <form action="${pageContext.request.contextPath}/backend/company/modify" method="post"
+              enctype="multipart/form-data" class="form-horizontal" id="frmModifyCompany">
+            <input type="hidden" name="pageNum" value="${pageInfo.pageNum}">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">修改新闻</h4>
+                    <h4 class="modal-title">修改企业用户</h4>
                 </div>
-                <div class="modal-body text-center">
-                    <div class="row text-right">
-                        <label for="NewsNum" class="col-sm-4 control-label">编号：</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="NewsNum" name="id" readonly>
+                <div class="modal-body text-center row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="modifyCompanyId" class="col-sm-4 control-label">编号：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyId" name="id" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modifyCompanyName" class="col-sm-4 control-label">公司名称：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyName" name="companyName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifyCompanyLogo" class="col-sm-4 control-label">公司logo：</label>
+                            <div class="col-sm-8">
+                                <a href="javascript:;" class="file">选择文件
+                                    <input type="file" name="file" id="modifyCompanyLogo">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modifyCompanyPerson" class="col-sm-4 control-label">企业法人：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyPerson" name="companyPerson">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modifyCompanyEmail" class="col-sm-4 control-label">公司邮箱：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyEmail" name="companyEmail">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifyCompanyAddress" class="col-sm-4 control-label">公司地址：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyAddress" name="companyAddress">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifyCompanyType" class="col-sm-4 control-label">公司类型：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyType" name="companyType">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifyCompanyDesc" class="col-sm-4 control-label">公司描述：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyDesc" name="companyDesc">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modifyCompanyPhone" class="col-sm-4 control-label">公司电话：</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyPhone" name="companyPhone">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modifyCompanyCreateDate" class="col-sm-4 control-label">公司创建时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="modifyCompanyCreateDate"
+                                       name="companyCreateDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})">
+                            </div>
                         </div>
                     </div>
-                    <br>
-                    <div class="modal-body text-center">
-                        <div class="row text-right">
-                            <label for="modifyNewsTitle" class="col-sm-4 control-label">标题：</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="modifyNewsTitle" name="newsTitle">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row text-right">
-                            <label for="modifyNewsContent" class="col-sm-4 control-label">内容：</label>
-                            <div class="col-sm-4">
-                                <textarea class="form-control" rows="8" id="modifyNewsContent"
-                                          name="newsContent"></textarea>
-                            </div>
-                        </div>
-                        <br>
+                    <div class="col-sm-4">
+                        <!-- 显示图像预览 -->
+                        <img style="width: 160px;height: 180px;" id="img2">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-warning updateProType" onclick="modifyNews()">修改</button>
+                    <input class="btn btn-primary" type="submit" value="修改"></input>
                     <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
                 </div>
             </div>
-
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 <!-- 修改公司 end -->
 
+
 <!-- 确认删除公司 start -->
-<div class="modal fade" tabindex="-1" id="delNews">
-    <input type="hidden" id="NewsId"/>
+<div class="modal fade" tabindex="-1" id="delCompany">
+    <input type="hidden" id="CompanyId"/>
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-sm">
         <!-- 内容声明 -->
@@ -515,10 +651,10 @@
                 <h4 class="modal-title">提示消息</h4>
             </div>
             <div class="modal-body text-center">
-                <h4>确认删除该新闻吗？</h4>
+                <h4>确认删除该企业用户吗？</h4>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-warning updateProType" onclick="deleteNews()">确认</button>
+                <button class="btn btn-warning updateProType" onclick="deleteCompany()">确认</button>
                 <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
             </div>
         </div>

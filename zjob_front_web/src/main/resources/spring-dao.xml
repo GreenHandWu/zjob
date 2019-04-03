@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--通过一个后置处理器，将源路径下的.properties文件读取-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+                <value>classpath:ftp.properties</value>
+            </list>
+        </property>
+
+
+    </bean>
+
+
+    <!--集成数据库源-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+    </bean>
+
+    <!--集成mybatis-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置别名-->
+        <property name="typeAliasesPackage" value="com.wzm.zjob.entity"/>
+
+        <!--配置管理Mapper.xml
+        扫描mapper包下所有以Mapper结尾的xml文件，让其被spring管理
+        -->
+        <property name="mapperLocations" value="classpath:com/wzm/zjob/mapper/*Mapper.xml"/>
+        <!--配置mybatis分页拦截器-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--配置数据库方言-->
+                        <props>
+                            <prop key="helperDialect">mysql</prop>
+                        </props>
+
+                    </property>
+
+                </bean>
+            </array>
+
+
+        </property>
+
+
+    </bean>
+
+    <!--生成Mapper代理,
+    将对应dao接口，转换成被spring管理的dao代理类,其id就是dao接口名称第一个字母小写
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.wzm.zjob.dao"/>
+    </bean>
+
+    <!--扫描dao包-->
+    <context:component-scan base-package="com.wzm.zjob.dao"/>
+
+
+</beans>

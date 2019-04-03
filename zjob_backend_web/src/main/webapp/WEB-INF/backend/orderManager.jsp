@@ -55,6 +55,7 @@
             });
 
         });
+
     </script>
 </head>
 
@@ -95,7 +96,7 @@
             <%--bootstrap分页条--%>
             <ul id="pagination"></ul>
         </div>
-        <input type="button" value="导出所有订单" style="float: right" class="btn btn-warning" onclick="downloadOrders()">
+        <button style="float: right" class="btn btn-warning" ><a href="${pageContext.request.contextPath}/backend/order/download">导出所有订单</a></button>
     </div>
 </div>
 

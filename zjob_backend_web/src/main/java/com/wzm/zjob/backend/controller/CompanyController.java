@@ -2,6 +2,7 @@ package com.wzm.zjob.backend.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
+import com.wzm.zjob.Constants.ResponseResult;
 import com.wzm.zjob.backend.vo.CompanyVo;
 import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.Company;
@@ -116,6 +117,56 @@ public class CompanyController {
 
     }
 
+    @RequestMapping("/modifyStatus")
+    @ResponseBody
+    public ResponseResult modifyStatus(int id) {
+        if(companyService.modifyStatus(id)==1){
+            return  ResponseResult.success("更新新闻状态成功");}
+        else {
+            return  ResponseResult.fail("更新新闻状态失败");
+        }
+    }
+
+    @RequestMapping("/deleteById")
+    @ResponseBody
+    public ResponseResult deleteById(int id) {
+        try {
+            int result = companyService.deleteById(id);
+            if(result==1){
+                return  ResponseResult.success("删除成功");
+            }else {
+                return  ResponseResult.fail("删除失败");
+            }
+        }catch (Exception e){
+            return  ResponseResult.fail("删除失败");
+        }
+    }
+
+    @RequestMapping("/findById")
+    @ResponseBody
+    public ResponseResult findById(int id) {
+        Company company = companyService.findById(id);
+        return  ResponseResult.success(company);
+    }
+    @RequestMapping("/modify")
+    public String modify(CompanyVo companyVo,Integer pageNum,Model model) {
+        CompanyDto companyDto = new CompanyDto();
+        Date companyCreateDate = companyVo.getCompanyCreateDate();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(companyCreateDate);//date 换成已经已知的Date对象
+        cal.add(Calendar.HOUR_OF_DAY, 8);// before 8 hour
+        companyVo.setCompanyCreateDate(cal.getTime());
+        try {
+            PropertyUtils.copyProperties(companyDto, companyVo);
+            companyDto.setFileName(companyVo.getFile().getOriginalFilename());
+            companyDto.setInputStream(companyVo.getFile().getInputStream());
+            companyService.modify(companyDto);
+            model.addAttribute("successMsg","修改成功");
+        } catch (Exception e) {
+            model.addAttribute("errorMsg", e.getMessage());
+        }
+        return "forward:findAllByPage?pageNum="+pageNum;//转发到findAll请求
+    }
 
 
 }

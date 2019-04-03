@@ -21,4 +21,9 @@ public class OrderServiceImpl implements OrderService {
         PageInfo<Order> pageInfo = new PageInfo<>(orderList);
         return pageInfo;
     }
+
+    @Override
+    public List<Order> findAll() {
+        return orderDao.selectAll();
+    }
 }

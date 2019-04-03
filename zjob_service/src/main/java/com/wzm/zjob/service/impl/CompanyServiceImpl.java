@@ -6,6 +6,7 @@ import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.dao.CompanyDao;
 import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.Company;
+import com.wzm.zjob.exception.FileDeleteException;
 import com.wzm.zjob.exception.FileUploadException;
 import com.wzm.zjob.ftp.FtpConfig;
 import com.wzm.zjob.ftp.FtpUtils;
@@ -73,24 +74,71 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public int deleteById(int id) {
-        return 0;
+    public int deleteById(int id) throws FileDeleteException {
+        Company company = companyDao.selectById(id);
+        String companyLogo = company.getCompanyLogo();
+        String fileName = companyLogo.substring(companyLogo.lastIndexOf("/") + 1);
+        String[] split = companyLogo.split("/");
+        String filePath ="/"+ split[split.length-2];
+        try {
+            boolean a = FtpUtils.deleteFile(ftpConfig.getFTP_ADDRESS(), ftpConfig.getFTP_PORT(), ftpConfig.getFTP_USERNAME(), ftpConfig.getFTP_PASSWORD(), ftpConfig.getFTP_BASEPATH(), filePath, fileName);
+        }catch (Exception e){
+            throw new FileDeleteException("文件删除失败:" + e.getMessage());
+        }
+        return companyDao.deleteById(id);
     }
 
     @Override
     public int modifyStatus(int id) {
-        return 0;
+        return companyDao.updateStatus(id);
     }
 
     @Override
     public Company findById(int id) {
-        return null;
+        return companyDao.selectById(id);
     }
 
     @Override
-    public int modify(Company company) {
-        return 0;
+    public void modify(CompanyDto companyDto) throws FileUploadException, FileDeleteException {
+        Company company = companyDao.selectById(companyDto.getId());
+        String companyLogo = company.getCompanyLogo();
+        String fileName = companyLogo.substring(companyLogo.lastIndexOf("/") + 1);
+        String[] split = companyLogo.split("/");
+        String filePath ="/"+ split[split.length-2];
+        try {
+            boolean a = FtpUtils.deleteFile(ftpConfig.getFTP_ADDRESS(), ftpConfig.getFTP_PORT(), ftpConfig.getFTP_USERNAME(), ftpConfig.getFTP_PASSWORD(), ftpConfig.getFTP_BASEPATH(), filePath, fileName);
+        }catch (Exception e){
+            throw new FileDeleteException("文件删除失败:" + e.getMessage());
+        }
+
+        //获取文件名
+        //处理该文件名，通过一种方式获取一个尽可能不冲突的文件名
+        fileName = StringUtils.renameFileName(companyDto.getFileName());
+        //String filePath = productDto.getUploadPath() + "\\" + fileName;
+        //获取ftp服务器上的二级目录
+        String picSavePath = "/logo";
+        filePath="";
+        //上传文件
+        try {
+            //StreamUtils.copy(productDto.getInputStream(), new FileOutputStream(filePath));
+            filePath = FtpUtils.pictureUploadByConfig(ftpConfig, fileName, picSavePath, companyDto.getInputStream());
+        } catch (IOException e) {
+            throw new FileUploadException("文件上传失败:" + e.getMessage());
+        }
+        //将相关值保存到数据库
+        //dto--->pojo
+        company = new Company();
+        try {
+            PropertyUtils.copyProperties(company, companyDto);
+            company.setCompanyLogo(filePath);
+            companyDao.update(company);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+
+
 
     @Override
     public List<Company> findEnable(int valid) {

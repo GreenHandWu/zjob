@@ -2,13 +2,21 @@ package com.wzm.zjob.backend.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
+import com.wzm.zjob.Constants.ResponseResult;
 import com.wzm.zjob.entity.Order;
+import com.wzm.zjob.excel.ExcelUtil;
 import com.wzm.zjob.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/backend/order")
@@ -28,5 +36,22 @@ public class OrderController {
         //返回产品新闻管理视图
         return "orderManager";
     }
+
+    @RequestMapping("/download")
+    @ResponseBody
+    public void download(HttpServletResponse resp){
+        try {
+            resp.setContentType("application/x-excel");
+            //设置处理方式为附件处理方式
+            resp.setHeader("content-disposition", "attachment;filename=order.xls");
+            List<Order> orderList = orderService.findAll();
+            ExcelUtil.exportExcel(orderList, resp.getOutputStream());
+            System.out.println("导出成功");
+        }catch (Exception e){
+            System.out.println("导出失败");
+        }
+
+    }
+
 
 }

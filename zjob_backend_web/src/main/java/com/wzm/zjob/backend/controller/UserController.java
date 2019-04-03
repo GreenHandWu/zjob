@@ -151,7 +151,6 @@ public class UserController {
 
     @RequestMapping("/modify")
     public String modify(UserVo userVo,Integer pageNum, HttpSession session,Model model) {
-        System.out.println("23256+5+");
         UserDto userDto = new UserDto();
         try {
             //将vo中属性值对应的拷贝到dto的相关属性中(属性必须一一对应),获取部分值

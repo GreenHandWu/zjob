@@ -13,4 +13,12 @@ public interface CompanyDao {
     public List<Company> selectEnable(int valid);
 
     public Company selectByCompanyNameAndId(@Param("companyName") String companyName, @Param("id") Integer id);
+
+    public int updateStatus(int id);
+
+    public Company selectById(int id);
+
+    public int deleteById(int id);
+
+    public int update(Company company);
 }
