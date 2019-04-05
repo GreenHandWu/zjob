@@ -7,9 +7,7 @@ import com.wzm.zjob.dao.CompanyDao;
 import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.Company;
 import com.wzm.zjob.entity.Sysuser;
-import com.wzm.zjob.exception.FileDeleteException;
-import com.wzm.zjob.exception.FileUploadException;
-import com.wzm.zjob.exception.SysuserNotExistException;
+import com.wzm.zjob.exception.*;
 import com.wzm.zjob.ftp.FtpConfig;
 import com.wzm.zjob.ftp.FtpUtils;
 import com.wzm.zjob.service.CompanyService;
@@ -17,6 +15,7 @@ import com.wzm.zjob.utils.StringUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
@@ -164,5 +163,22 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyStatus(Constant.VALID);
         company.setPositionNum(0);
         return companyDao.insert(company);
+    }
+    @Override
+    public void modifyPwd(Integer id, String oldPass, String newPass) throws PasswordWrongException {
+        if(!companyDao.selectById(id).getPassword().equals(DigestUtils.md5DigestAsHex(oldPass.getBytes()))){
+            throw new PasswordWrongException("密码错误");
+        }else {
+            companyDao.updatePwd(id,DigestUtils.md5DigestAsHex(newPass.getBytes()));
+        }
+    }
+    @Transactional
+    @Override
+    public void reducePositionNum(Integer id) throws PositionNumException {
+        int i = companyDao.selectById(id).getPositionNum();
+        if(i<=0){
+            throw new PositionNumException("请购买服务");
+        }
+       companyDao.reducePositionNum(id);
     }
 }

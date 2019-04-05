@@ -22,6 +22,7 @@
     <script type="text/javascript" src="<%=request.getContextPath()%>/bootstrap/js/bootstrapValidator.min.js"></script>
     <script type="text/javascript">
         $(function () {
+            console.log("${data}");
             $('#frmQuery').bootstrapValidator({
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
@@ -60,8 +61,6 @@
                     $('#pageNum').val(page);
                     //重新提交表单
                     $('#frmQuery').submit();
-
-
                 },
                 itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
                     switch (type) {
@@ -223,15 +222,15 @@
                     </thead>
                     <tbody id="tb">
                     <c:forEach items="${data.list}" var="job">
-                    <tr>
-                        <td><a onclick="showPosition(${job.id})">${job.positionName}</a></td>
-                        <td><a onclick="showCompany(${job.company.id})">${job.company.companyName}</a></td>
-                        <td>${job.positionEdu}</td>
-                        <td>${job.positionNum}</td>
-                        <td>${job.positionSalary}</td>
-                        <td><input type="button" class="btn btn-warning btn-sm doProDelete" value="申请"
-                                                onclick="showConfirmModal(${job.id})"></td>
-                    </tr>
+                        <tr>
+                            <td><a onclick="showPosition(${job.id})">${job.positionName}</a></td>
+                            <td><a onclick="showCompany(${job.company.id})">${job.company.companyName}</a></td>
+                            <td>${job.positionEdu}</td>
+                            <td>${job.positionNum}</td>
+                            <td>${job.positionSalary}</td>
+                            <td><input type="button" class="btn btn-warning btn-sm doProDelete" value="申请"
+                                       onclick="showConfirmModal(${job.id})"></td>
+                        </tr>
                     </c:forEach>
                     </tbody>
                 </table>
@@ -349,10 +348,10 @@
                         <img style="width: 160px;height: 180px;" id="findimg">
                     </div>
                     <div>&nbsp;</div>
-                        <div class="col-sm-4">
+                    <div class="col-sm-4">
                                 <textarea class="form-control" id="findCompanyDesc" rows="8" readonly>
                                 </textarea>
-                        </div>
+                    </div>
 
                     <br/>
                     <br/>

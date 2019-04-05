@@ -23,4 +23,14 @@ public class FindJobServiceImpl implements FindJobService {
     public List<FindJob> findByUserId(Integer id) {
         return findJobDao.selectAllByUserId(id);
     }
+
+    @Override
+    public List<FindJob> findByCompanyId(Integer companyId) {
+        return findJobDao.selectAllByCompanyId(companyId);
+    }
+
+    @Override
+    public void sendEmail(Integer positionId, Integer userId, Integer isSend) {
+        findJobDao.updateIsSend(positionId,userId,isSend);
+    }
 }

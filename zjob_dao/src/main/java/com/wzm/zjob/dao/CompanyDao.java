@@ -23,4 +23,8 @@ public interface CompanyDao {
     public int update(Company company);
 
     public Company selectByLoginNameAndPassword(@Param("loginName") String loginName,@Param("password") String password, @Param("status") int status);
+
+    public void updatePwd(@Param("id") Integer id, @Param("newPass") String newPass);
+
+    public void reducePositionNum(Integer id);
 }

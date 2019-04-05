@@ -193,6 +193,20 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <update id="updatePwd">
+    update company
+    set
+      password = #{newPass,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="reducePositionNum">
+         update company
+    set
+      position_num = position_num-1
+    where id = #{id,jdbcType=INTEGER}
+
+
+    </update>
 
     <select id="selectByLoginNameAndPassword" resultMap="CompanyMap">
         select

@@ -219,7 +219,6 @@ public class UserController {
     public String modifyPwd(Integer id, String oldPass, String newPass) {
         try {
                 userService.modifyPwd(id, oldPass, newPass);
-            System.out.println(1234679);
             return "success";
         } catch (Exception e) {
 

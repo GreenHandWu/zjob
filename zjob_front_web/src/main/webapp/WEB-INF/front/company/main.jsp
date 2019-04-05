@@ -45,6 +45,10 @@
             $("#mydata-set").click(function () {
                 $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findMyData");
             });
+            $("#password-set").click(function () {
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/toModifyCompanyPwd");
+            });
+
         });
 
         function loginOut() {
@@ -100,6 +104,9 @@
                         </li>
                         <li class="list-group-item" name="productSet" id="mydata-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-wrench"></i> &nbsp;企业信息
+                        </li>
+                        <li class="list-group-item" name="passwordSet" id="password-set" style="cursor: pointer">
+                            <i class="glyphicon glyphicon-flag"></i> &nbsp;修改密码
                         </li>
                     </ul>
                 </div>

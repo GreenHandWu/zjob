@@ -10,6 +10,12 @@
     values (#{positionId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{isSend,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP}
       )
   </insert>
+    <update id="updateIsSend">
+      update findjob
+        set is_send = #{IsSend}
+        where position_id = #{positionId}
+        and user_id = #{userId}
+    </update>
     <select id="selectAllByUserId" resultType="com.wzm.zjob.entity.FindJob">
     select f.position_id as positionId,
      p.position_name as positionName,
@@ -17,11 +23,29 @@
     c.id as companyId,
     c.company_name as companyName,
     f.is_send as isSend,
-    f.create_time as createDate
+    f.create_time as createTime
     from findjob f ,company c,position p
     where f.user_id=#{userId}
     and  f.position_id = p.id
     and  p.company_id = c.id
+    order by f.create_time
+    </select>
+    <select id="selectAllByCompanyId" resultType="com.wzm.zjob.entity.FindJob">
+    select f.position_id as positionId,
+           p.position_name as positionName,
+           u.id           as  userId,
+           u.user_name           as  userName,
+           u.gender           as  gender,
+           u.phone          as  phone,
+           u.user_edu        as  userEdu,
+           u.email          as  email,
+           u.user_resume         as  userResume,
+           f.is_send as isSend,
+           f.create_time as createTime
+           from findjob f ,user u,position p,company c
+           where c.id = #{companyId}
+           and  f.position_id = p.id
+           and  f.user_id = u.id
     order by f.create_time
     </select>
 

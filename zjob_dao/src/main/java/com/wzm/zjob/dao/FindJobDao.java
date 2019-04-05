@@ -11,4 +11,8 @@ public interface FindJobDao {
                       @Param("isSend") Integer isSend, @Param("time")Date time);
     public List<FindJob> selectAllByUserId(Integer userId);
 
+    public List<FindJob> selectAllByCompanyId(Integer companyId);
+
+    public void updateIsSend(@Param("positionId") Integer positionId,@Param("userId") Integer userId,@Param("IsSend") Integer IsSend);
+
 }

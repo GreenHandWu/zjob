@@ -3,9 +3,7 @@ package com.wzm.zjob.service;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.Company;
-import com.wzm.zjob.exception.FileDeleteException;
-import com.wzm.zjob.exception.FileUploadException;
-import com.wzm.zjob.exception.SysuserNotExistException;
+import com.wzm.zjob.exception.*;
 
 import java.util.List;
 
@@ -29,4 +27,8 @@ public interface CompanyService {
     public Company findByLoginNameAndPassowrd(String loginName, String password) throws SysuserNotExistException;
 
     public int add(Company company);
+
+    public void modifyPwd(Integer id, String oldPass, String newPass) throws PasswordWrongException;
+
+    public void reducePositionNum(Integer id) throws PositionNumException;
 }

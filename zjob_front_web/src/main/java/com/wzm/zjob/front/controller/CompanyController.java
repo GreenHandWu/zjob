@@ -1,16 +1,15 @@
 package com.wzm.zjob.front.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.Constants.ResponseResult;
 import com.wzm.zjob.dto.CompanyDto;
-import com.wzm.zjob.entity.Company;
-import com.wzm.zjob.entity.Order;
-import com.wzm.zjob.entity.Position;
+import com.wzm.zjob.entity.*;
 import com.wzm.zjob.front.vo.CompanyVo;
-import com.wzm.zjob.service.CompanyService;
-import com.wzm.zjob.service.OrderService;
-import com.wzm.zjob.service.PositionService;
+import com.wzm.zjob.front.vo.EmailVo;
+import com.wzm.zjob.service.*;
+import com.wzm.zjob.utils.QQMailUtil;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,10 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/front/company")
@@ -41,6 +37,10 @@ public class CompanyController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private FindJobService findJobService;
+    @Autowired
+    private UserService userService;
     @RequestMapping("checkCompanyName")
     @ResponseBody
     //自动将被校验的值注入
@@ -196,12 +196,12 @@ public class CompanyController {
 
     @RequestMapping("/findOrderAllByPage")
     //分页查询记录
-    public String findOrderAllByPage(Integer pageNum, Model model,HttpSession session) {
+    public String findOrderAllByPage(Integer pageNum, Model model, HttpSession session) {
         Company company = (Company) session.getAttribute("company");
         if (ObjectUtils.isEmpty(pageNum)) {
             pageNum = Constant.PAGE_NUM;
         }
-       Integer id = company.getId();
+        Integer id = company.getId();
         //调用service获取新闻列表
         PageInfo<Order> pageInfo = orderService.findAllByPageAndCompanyId(pageNum, Constant.PAGE_SIZE, id);
         //将该列表存入model,相当于request
@@ -209,6 +209,70 @@ public class CompanyController {
         //返回产品新闻管理视图
         return "/company/orderManager";
     }
+
+    @RequestMapping("/toModifyCompanyPwd")
+    public String toModifyCompanyPwd(Model model, HttpSession session) {
+        return "/company/password";
+    }
+
+    @RequestMapping("modifyCompanyPwd")
+    @ResponseBody
+    public String modifyCompanyPwd(Integer id, String oldPass, String newPass) {
+        try {
+            companyService.modifyPwd(id, oldPass, newPass);
+            return "success";
+        } catch (Exception e) {
+            return "fail";
+        }
+    }
+
+    @RequestMapping("/findResumeAllByPage")
+    //分页查询记录
+    public String findResumeAllByPage(Integer pageNum, Model model, HttpSession session) {
+        Company company = (Company) session.getAttribute("company");
+        Integer companyId = company.getId();
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        PageHelper.startPage(pageNum, Constant.PAGE_SIZE);
+        List<FindJob> findJobList = findJobService.findByCompanyId(companyId);
+        PageInfo<FindJob> pageInfo = new PageInfo<>(findJobList);
+        model.addAttribute("data", pageInfo);
+        //返回产品新闻管理视图
+        return "/company/resume";
+    }
+
+
+    @RequestMapping("/sendEmail")
+    @ResponseBody
+    public ResponseResult sendMail(EmailVo emailVo,HttpSession session) {
+        Company company = (Company) session.getAttribute("company");
+        User user = userService.findById(emailVo.getUserId());
+        try{
+            companyService.reducePositionNum(company.getId());
+        String context = "测试代码"+"<br/>"+
+                company.getCompanyName()+"的面试通知\n" +"<br/>"+
+                user.getUserName()+ "\n"+"<br/>"+
+                "面试职位\n" +emailVo.getPositionName()+"<br/>"+
+                "面试时间：\n" +emailVo.getTime()+"<br/>"+
+                "面试地点：\n" +emailVo.getVenue()+"<br/>"+
+                "通知内容：\n" +"<br/>"+
+                "我们已经通过zjob招聘网查阅了您的简历。在认真阅读及评估您的简历后，我们认为您符合本公司基本条件要求。" +"<br/>"+
+                "为进一步增加双方间的了解，希望您能够前往本公司面试。\n" +"<br/>"+
+                "如因未及时查看通知内容而错过面试时间，请来电另约";
+           // QQMailUtil.QQmail("面试通知",user.getEmail(),context );
+            Integer positionId = emailVo.getPositionId();
+                    Integer userId = emailVo.getUserId();
+                   Integer IsSend = Constant.VALID;
+            findJobService.sendEmail(positionId,userId,IsSend);
+            return ResponseResult.success("邮件发送成功");
+        }catch (Exception e){
+            return ResponseResult.fail("邮件发送失败"+e.getMessage());
+        }
+    }
+
+
+    //findProductAllByPage
 
 
 }

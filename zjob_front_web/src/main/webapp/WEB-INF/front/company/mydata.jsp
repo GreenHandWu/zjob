@@ -216,12 +216,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="modifyCompanyDesc" class="col-sm-4 control-label">公司描述：</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="modifyCompanyDesc" name="companyDesc">
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label for="modifyCompanyPhone" class="col-sm-4 control-label">公司电话：</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="modifyCompanyPhone" name="companyPhone">
@@ -239,6 +233,13 @@
                             <div class="col-sm-4">
                                 <!-- 显示图像预览 -->
                                 <img style="width: 160px;height: 180px;" id="img">
+                                <div>&nbsp;</div>
+                                <div> <label for="modifyCompanyCreateDate" class="col-sm-7 control-label">公司描述</label></div>
+                                <div class="col-sm-12">
+                                <textarea class="form-control" id="modifyCompanyDesc"  name="companyDesc" rows="8">
+                                </textarea>
+                                </div>
+
                             </div>
                         </div>
                         <div class="modal-footer">

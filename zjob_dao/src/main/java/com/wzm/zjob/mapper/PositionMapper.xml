@@ -130,10 +130,10 @@
             <if test="positionEdu!=null and positionEdu!=''">
                 and p.position_edu=#{positionEdu}
             </if>
-            <if test="isValid!=null and isValid!=''">
+            <if test="isValid!=null">
                 and p.status = #{isValid}
             </if>
-            <if test="isValid!=null and isValid!=''">
+            <if test="isValid!=null">
                 and c.company_status=#{isValid}
             </if>
         </where>
