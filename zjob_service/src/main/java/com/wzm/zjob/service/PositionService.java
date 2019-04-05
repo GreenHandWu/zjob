@@ -20,4 +20,6 @@ public interface PositionService {
     public int modify(Position position);
 
     public  List<Position> findByParams(JobParam jobParam);
+
+    public  PageInfo<Position> findAllByPageAndCompanyId(Integer pageNum, int pageSize, Integer id);
 }

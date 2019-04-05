@@ -53,4 +53,12 @@ public class PositionServiceImpl implements PositionService {
     public List<Position> findByParams(JobParam jobParam) {
         return positionDao.selectByParams(jobParam);
     }
+
+    @Override
+    public PageInfo<Position> findAllByPageAndCompanyId(Integer pageNum, int pageSize, Integer id) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Position> positionList = positionDao.selectAllByCompanyId(id);
+        PageInfo<Position> pageInfo = new PageInfo<>(positionList);
+        return pageInfo;
+    }
 }

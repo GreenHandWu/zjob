@@ -1,10 +1,10 @@
-package com.wzm.zjob.backend.controller;
+package com.wzm.zjob.front.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.Constants.ResponseResult;
-import com.wzm.zjob.backend.vo.UserVo;
+import com.wzm.zjob.front.vo.UserVo;
 import com.wzm.zjob.dto.UserDto;
 import com.wzm.zjob.entity.*;
 import com.wzm.zjob.params.JobParam;

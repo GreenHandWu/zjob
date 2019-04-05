@@ -22,7 +22,6 @@
             //let second = d.getSeconds();
             //将值拼接后写入id=timeId的节点上
             $("#timeId").html(year + '年' + month + '月' + day + '日' + hour + '时' + minute + '分');
-
         }
 
         $(function () {
@@ -31,26 +30,20 @@
         });
         $(function () {
             // 点击切换页面
-            $("#news-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findAllByPage");
+            $("#position-set").click(function () {
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findPositionAllByPage");
             });
-            $("#company-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findAllByPage");
-            });
-            $("#user-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/user/findAllByPage");
-            });
-            $("#manager-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/sysuser/findAllByPage");
+            $("#resume-set").click(function () {
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findResumeAllByPage");
             });
             $("#product-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/product/findAllByPage");
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/user/findProductAllByPage");
             });
             $("#order-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/backend/order/findAllByPage");
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/sysuser/findOrderAllByPage");
             });
-            $("#position-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/backend/position/findAllByPage");
+            $("#mydata-set").click(function () {
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/product/findMyData");
             });
         });
 
@@ -93,25 +86,25 @@
                 <div class="col-xs-2 user-wrap">
                     <ul class="list-group">
                         <li id="timeId"></li>
-                        <li class="list-group-item active" name="userSet" id="news-set" style="cursor: pointer">
+                        <li class="list-group-item active" name="userSet" id="position-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-user"></i> &nbsp;职位管理
                         </li>
-                        <li class="list-group-item" name="userPic" id="user-set" style="cursor: pointer">
+                        <li class="list-group-item" name="userPic" id="resume-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-envelope"></i> &nbsp;收到的简历
                         </li>
-                        <li class="list-group-item" name="companySet" id="company-set" style="cursor: pointer">
+                        <li class="list-group-item" name="companySet" id="product-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-th-list"></i> &nbsp;服务购买
                         </li>
-                        <li class="list-group-item" name="adminSet" id="manager-set" style="cursor: pointer">
+                        <li class="list-group-item" name="adminSet" id="order-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-globe"></i> &nbsp;订单查看
                         </li>
-                        <li class="list-group-item" name="productSet" id="product-set" style="cursor: pointer">
+                        <li class="list-group-item" name="productSet" id="mydata-set" style="cursor: pointer">
                             <i class="glyphicon glyphicon-wrench"></i> &nbsp;企业信息
                         </li>
                     </ul>
                 </div>
                 <div class="col-xs-10" id="userPanel">
-                    <iframe id="frame-id" src="${pageContext.request.contextPath}/backend/news/findAllByPage"
+                    <iframe id="frame-id" src="${pageContext.request.contextPath}/front/company/findPositionAllByPage"
                             width="100%" height="100%" frameborder="0" scrolling="no">
                     </iframe>
                 </div>

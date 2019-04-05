@@ -1,4 +1,4 @@
-package com.wzm.zjob.backend.vo;
+package com.wzm.zjob.front.vo;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;

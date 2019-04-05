@@ -12,7 +12,7 @@
         color: #fff;
     }
     .welcome{
-        width: 150px;
+        width: 200px;
         position: absolute;
         top: 0;
         right: 100px;
@@ -39,7 +39,7 @@
 
     .content-cc {
         padding-bottom: 40px;
-        /* 必须使用和footer相同的高度 */
+        /* 锟斤拷锟斤拷使锟矫猴拷footer锟斤拷同锟侥高讹拷 */
     }
 
     .flude-cc {
@@ -86,7 +86,7 @@
     .footer {
         position: relative;
         margin-top: -40px;
-        /* footer高度的负值 */
+        /* footer锟竭度的革拷值 */
         height: 40px;
         line-height: 40px;
         text-align: center;

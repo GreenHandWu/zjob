@@ -14,7 +14,7 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
         <association property="company" javaType="Company">
             <id property="id" column="company_id"/>
-            <result column="c_id" jdbcType="INTEGER"  property="id"/>
+            <result column="c_id" jdbcType="INTEGER" property="id"/>
             <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
         </association>
     </resultMap>
@@ -106,11 +106,11 @@
   </delete>
     <select id="selectById" parameterType="java.lang.Integer" resultMap="PositionMap">
         select
-        <include refid="Position_List" />
+        <include refid="Position_List"/>
         from position
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectByParams"  parameterType="com.wzm.zjob.params.JobParam"   resultMap="PositionMap">
+    <select id="selectByParams" parameterType="com.wzm.zjob.params.JobParam" resultMap="PositionMap">
         select
         p.id, p.position_name, p.position_salary, p.position_num, p.position_require,
         p.position_edu, c.id as c_id, p.position_phone, p.status,c.company_name
@@ -137,6 +137,15 @@
                 and c.company_status=#{isValid}
             </if>
         </where>
+    </select>
+    <select id="selectAllByCompanyId" resultMap="PositionMap">
+        select
+        p.id, p.position_name, p.position_salary, p.position_num, p.position_require,
+         p.position_edu, c.id, p.position_phone, p.status,c.company_name
+        from position p
+        left join company c
+        on p.company_id=c.id
+        where p.company_id = #{id}
     </select>
 
     <update id="update" parameterType="Position">
@@ -169,8 +178,6 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-
-
 
 
 </mapper>

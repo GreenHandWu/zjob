@@ -19,4 +19,6 @@ public interface PositionDao {
     public int update(Position position);
 
     public List<Position> selectByParams(JobParam jobParam);
+
+    public List<Position> selectAllByCompanyId(Integer id);
 }

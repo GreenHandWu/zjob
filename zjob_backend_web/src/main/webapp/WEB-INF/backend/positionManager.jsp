@@ -109,7 +109,7 @@
                 //分页时用到的url请求
                 //page:当前页
                 pageUrl: function (type, page, current) {
-                    return '${pageContext.request.contextPath}/backend/news/findAllByPage?pageNum=' + page;
+                    return '${pageContext.request.contextPath}/backend/position/findAllByPage?pageNum=' + page;
                 },
                 itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
                     switch (type) {

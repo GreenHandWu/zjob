@@ -1,4 +1,4 @@
-package com.wzm.zjob.backend.controller;
+package com.wzm.zjob.front.controller;
 
 import com.wzm.zjob.entity.Company;
 import com.wzm.zjob.entity.User;
