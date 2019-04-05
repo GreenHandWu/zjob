@@ -26,4 +26,12 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAll() {
         return orderDao.selectAll();
     }
+
+    @Override
+    public PageInfo<Order> findAllByPageAndCompanyId(Integer pageNum, int pageSize, Integer id) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Order> orderList = orderDao.selectAllByCompanyId(id);
+        PageInfo<Order> pageInfo = new PageInfo<>(orderList);
+        return pageInfo;
+    }
 }

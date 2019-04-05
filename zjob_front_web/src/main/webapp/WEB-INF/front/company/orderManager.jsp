@@ -74,7 +74,7 @@
                     <th class="text-center">编号</th>
                     <th class="text-center">公司名称</th>
                     <th class="text-center">产品名称</th>
-                    <th class="text-center">产品数量</th>
+                    <th class="text-center">邮件服务数量</th>
                     <th class="text-center">订单金额</th>
                     <th class="text-center">创建日期</th>
                 </tr>
@@ -90,13 +90,11 @@
                         <td><fmt:formatDate value="${order.createTime}" pattern="yyyy-MM-dd HH:mm:ss" timeZone="UTC"/></td>
                     </tr>
                 </c:forEach>
-
                 </tbody>
             </table>
             <%--bootstrap分页条--%>
             <ul id="pagination"></ul>
         </div>
-        <button style="float: right" class="btn btn-warning" ><a href="${pageContext.request.contextPath}/backend/order/download">导出所有订单</a></button>
     </div>
 </div>
 

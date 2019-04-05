@@ -55,7 +55,7 @@ public class ExcelUtil {
 			HSSFRow rowHead = sheet.createRow(1);
 
 			//创建一个数组，用于保存列头值信息
-			String[] titles = {"序号","企业用户","产品","购买数量","总价","创建时间"};
+			String[] titles = {"序号","企业用户","产品","邮件服务数量","总价","创建时间"};
 			//遍历该数组，将值写入对应的单元格
 			for (int i = 0; i < titles.length; i++) {
 				//在列上创建每一个单元格

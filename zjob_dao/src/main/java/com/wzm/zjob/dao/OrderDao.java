@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface OrderDao {
     public List<Order> selectAll();
+
+    public List<Order> selectAllByCompanyId(Integer id);
 }

@@ -9,4 +9,6 @@ public interface OrderService {
     public PageInfo<Order> findAllByPage(Integer pageNum, int pageSize);
 
     public List<Order> findAll();
+
+    PageInfo<Order> findAllByPageAndCompanyId(Integer pageNum, int pageSize, Integer id);
 }

@@ -37,13 +37,13 @@
                 $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findResumeAllByPage");
             });
             $("#product-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/user/findProductAllByPage");
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findProductAllByPage");
             });
             $("#order-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/sysuser/findOrderAllByPage");
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findOrderAllByPage");
             });
             $("#mydata-set").click(function () {
-                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/product/findMyData");
+                $("#frame-id").attr("src", "${pageContext.request.contextPath}/front/company/findMyData");
             });
         });
 

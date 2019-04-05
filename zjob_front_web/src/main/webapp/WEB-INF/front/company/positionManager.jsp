@@ -109,7 +109,7 @@
                 //分页时用到的url请求
                 //page:当前页
                 pageUrl: function (type, page, current) {
-                    return '${pageContext.request.contextPath}/backend/news/findAllByPage?pageNum=' + page;
+                    return '${pageContext.request.contextPath}/front/company/findPositionAllByPage?pageNum=' + page;
                 },
                 itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
                     switch (type) {
@@ -224,7 +224,7 @@
             if (bv.isValid()) {
                 //alert(1);
                 //调用ajax到后台执行添加用户
-                $.post('${pageContext.request.contextPath}/backend/position/add',
+                $.post('${pageContext.request.contextPath}/front/company/addPosition',
                     //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
                     $('#frmAddPosition').serialize(), function (result) {
 
@@ -233,7 +233,7 @@
                                 time: 2000,
                                 skin: 'successMsg'
                             }, function () {
-                                location.href = '${pageContext.request.contextPath}/backend/position/findAllByPage?pageNum='
+                                location.href = '${pageContext.request.contextPath}/front/company/findPositionAllByPage?pageNum='
                                     +${data.pageNum};
                             });
                         } else if (result.status == 0) {
@@ -249,7 +249,7 @@
 
         //显示修改新闻界面
         function showPositionModify(id) {
-            $.post('${pageContext.request.contextPath}/backend/position/findById',
+            $.post('${pageContext.request.contextPath}/front/company/findPositionById',
                 {'id': id}, function (result) {
                     //console.log(result);
                     //如果成功，将值写入修改模态框
@@ -267,14 +267,14 @@
                 });
         }
 
-        //修改新闻
+        //修改职位
         function modifyPosition() {
             let bv = $('#frmModifyPosition').data('bootstrapValidator');
             bv.validate();
             if (bv.isValid()) {
                 //alert(1);
                 //调用ajax到后台执行添加用户
-                $.post('${pageContext.request.contextPath}/backend/position/modify',
+                $.post('${pageContext.request.contextPath}/front/company/modifyPosition',
                     //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
                     $('#frmModifyPosition').serialize(), function (result) {
 
@@ -283,7 +283,7 @@
                                 time: 2000,
                                 skin: 'successMsg'
                             }, function () {
-                                location.href = '${pageContext.request.contextPath}/backend/position/findAllByPage?pageNum='
+                                location.href = '${pageContext.request.contextPath}/front/company/findPositionAllByPage?pageNum='
                                     +${data.pageNum};
                             });
                         } else if (result.status == 0) {
@@ -310,7 +310,7 @@
 
         //删除职位
         function deletePosition() {
-            $.post('${pageContext.request.contextPath}/backend/position/deleteById',
+            $.post('${pageContext.request.contextPath}/front/company/deletePositionById',
                 {'id': $('#PositionId').val()}, function (result) {
                     if (result.status == 1) {
                         layer.msg(result.message, {
@@ -318,14 +318,16 @@
                             skin: 'successMsg'
                         }, function () {
                             //返回当前页
-                            window.location.href = '${pageContext.request.contextPath}/backend/position/findAllByPage?pageNum=' +${data.pageNum};
+                            window.location.href = '${pageContext.request.contextPath}/front/company/findPositionAllByPage?pageNum=' +${data.pageNum};
                         });
 
                     } else {
+                        $('#delPosition').modal('hide');
                         layer.msg(result.message, {
                             time: 2000,
                             skin: 'errorMsg'
                         });
+
                     }
 
 
@@ -336,7 +338,7 @@
         //更新状态
         function modifyStatus(id, btn) {
             //alert(id);
-            $.post('${pageContext.request.contextPath}/backend/position/modifyStatus',
+            $.post('${pageContext.request.contextPath}/front/company/modifyPositionStatus',
                 {'id': id}, function () {
                     //异步局部刷新页面
                     //找到该点击的按钮的父元素的上一个元素
@@ -362,20 +364,18 @@
         <h3 class="panel-title">职位管理</h3>
     </div>
     <div class="panel-body">
-        <input type="button" value="添加职位" class="btn btn-primary" onclick="showAddPosition()">
+        <input type="button" value="发布职位" class="btn btn-primary" onclick="showAddPosition()">
         <br>
         <br>
         <div class="show-list text-center">
             <table class="table table-bordered table-hover" style='text-align: center;'>
                 <thead>
                 <tr class="text-danger">
-                    <th class="text-center">编号</th>
                     <th class="text-center">职位名称</th>
                     <th class="text-center">薪资</th>
                     <th class="text-center">招聘人数</th>
                     <th class="text-center">职位要求</th>
                     <th class="text-center">学历要求</th>
-                    <th class="text-center">公司名称</th>
                     <th class="text-center">联系电话</th>
                     <th class="text-center">状态</th>
                     <th class="text-center">操作</th>
@@ -384,16 +384,12 @@
                 <tbody id="tb">
                 <c:forEach items="${data.list}" var="position">
                     <tr>
-                        <td>${position.id}</td>
                         <td>${position.positionName}</td>
                         <td>${position.positionSalary}</td>
                         <td>${position.positionNum}</td>
-                        <td>${position.positionRequire}</td>
+                        <td><div style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${position.positionRequire}</div></td>
                         <td>${position.positionEdu}</td>
-                        <td>${position.company.companyName}</td>
                         <td>${position.positionPhone}</td>
-
-
                         <td>
                             <c:if test="${position.status==1}">启用</c:if>
                             <c:if test="${position.status==0}">禁用</c:if>
@@ -432,7 +428,7 @@
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">添加职位</h4>
+                    <h4 class="modal-title">发布职位</h4>
                 </div>
                 <div class="modal-body text-center">
                     <div class="row text-right">
@@ -478,18 +474,6 @@
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="companyId" class="col-sm-4 control-label">公司名称：</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" name="companyId" id="companyId">
-                                <option value="">--请选择--</option>
-                                <c:forEach items="${companyList}" var="company">
-                                    <option value="${company.id}">${company.companyName}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row text-right">
                         <label for="positionPhone" class="col-sm-4 control-label">联系电话：</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="positionPhone" name="positionPhone">
@@ -520,13 +504,7 @@
                     <h4 class="modal-title">修改职位</h4>
                 </div>
                 <div class="modal-body text-center">
-                    <div class="row text-right">
-                        <label for="modifyId" class="col-sm-4 control-label">编号：</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="modifyId" name="id" readonly>
-                        </div>
-                    </div>
-                    <br>
+                            <input type="hidden" class="form-control" id="modifyId" name="id" readonly>
                     <div class="row text-right">
                         <label for="modifyPositionName" class="col-sm-4 control-label">职位名称：</label>
                         <div class="col-sm-4">
@@ -565,18 +543,6 @@
                                 <option value="本科">本科</option>
                                 <option value="硕士研究生">硕士研究生</option>
                                 <option value="博士研究生">博士研究生</option>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row text-right">
-                        <label for="modifyCompanyId" class="col-sm-4 control-label">公司名称：</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" name="companyId" id="modifyCompanyId">
-                                <option value="">--请选择--</option>
-                                <c:forEach items="${companyList}" var="company">
-                                    <option value="${company.id}">${company.companyName}</option>
-                                </c:forEach>
                             </select>
                         </div>
                     </div>

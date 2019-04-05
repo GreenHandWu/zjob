@@ -322,6 +322,7 @@
                         });
 
                     } else {
+                        $('#delPosition').modal('hide');
                         layer.msg(result.message, {
                             time: 2000,
                             skin: 'errorMsg'
@@ -388,7 +389,7 @@
                         <td>${position.positionName}</td>
                         <td>${position.positionSalary}</td>
                         <td>${position.positionNum}</td>
-                        <td>${position.positionRequire}</td>
+                        <td><div style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${position.positionRequire}</div></td>
                         <td>${position.positionEdu}</td>
                         <td>${position.company.companyName}</td>
                         <td>${position.positionPhone}</td>

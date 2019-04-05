@@ -28,4 +28,12 @@
         where o.company_id = co.id and o.product_id = p.id
         order by o.create_time desc
     </select>
+    <select id="selectAllByCompanyId" resultMap="OrderMap">
+ select
+        o.id, co.company_name, p.product_name, product_num, order_sum, create_time
+        from orders o,product p,company co
+        where o.company_id = co.id and o.product_id = p.id
+        and o.company_id = #{id}
+        order by o.create_time desc
+    </select>
 </mapper>

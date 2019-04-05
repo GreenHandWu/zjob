@@ -52,7 +52,7 @@
                     positionNum: {
                         validators: {
                             notEmpty: {
-                                message: '请输入产品数量'
+                                message: '请输入邮件服务数量'
                             },
                             digits: {
                                 message: '请输入数字（整数）'
@@ -146,7 +146,7 @@
                     positionNum: {
                         validators: {
                             notEmpty: {
-                                message: '请输入产品数量'
+                                message: '请输入邮件服务数量'
                             },
                             digits: {
                                 message: '请输入数字（整数）'
@@ -299,7 +299,7 @@
                     <th class="text-center">产品名称</th>
                     <th class="text-center">产品描述</th>
                     <th class="text-center">产品价格</th>
-                    <th class="text-center">职位数量</th>
+                    <th class="text-center">邮件服务数量</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -354,7 +354,7 @@
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="positionNum" class="col-sm-4 control-label">职位数量：</label>
+                        <label for="positionNum" class="col-sm-4 control-label">邮件服务数量：</label>
                         <div class=" col-sm-4">
                             <input type="number" class="form-control" id="positionNum" name="positionNum">
                         </div>
@@ -413,7 +413,7 @@
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="modifyPositionNum" class="col-sm-4 control-label">职位数量：</label>
+                        <label for="modifyPositionNum" class="col-sm-4 control-label">邮件服务数量：</label>
                         <div class=" col-sm-4">
                             <input type="number" class="form-control" id="modifyPositionNum" name="positionNum">
                         </div>
