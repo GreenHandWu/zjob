@@ -21,4 +21,8 @@ public interface UserDao {
     public int deleteById(Integer id);
 
     public User selectByUserNameAndId(@Param("userName") String userName, @Param("id") Integer id);
+
+    public User selectByLoginNameAndPassword(@Param("loginName") String loginName,@Param("password") String password, @Param("status") int status);
+
+    public void updatePwd(@Param("id") Integer id, @Param("newPass") String newPass);
 }

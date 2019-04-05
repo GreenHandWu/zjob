@@ -1,0 +1,10 @@
+.tooltipMsg{
+	width: 180px;
+	background: rgba(158, 214, 207,0.7);
+	color: white;
+	text-align: center;
+	border-radius: 4px;
+	line-height: 20px;
+	
+	
+}

@@ -6,8 +6,10 @@ import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.dao.CompanyDao;
 import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.Company;
+import com.wzm.zjob.entity.Sysuser;
 import com.wzm.zjob.exception.FileDeleteException;
 import com.wzm.zjob.exception.FileUploadException;
+import com.wzm.zjob.exception.SysuserNotExistException;
 import com.wzm.zjob.ftp.FtpConfig;
 import com.wzm.zjob.ftp.FtpUtils;
 import com.wzm.zjob.service.CompanyService;
@@ -15,6 +17,7 @@ import com.wzm.zjob.utils.StringUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,6 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
             PropertyUtils.copyProperties(company, companyDto);
             company.setCompanyStatus(Constant.VALID);
             company.setPositionNum(0);
+            company.setPassword(DigestUtils.md5DigestAsHex("123".getBytes()));
             company.setCompanyLogo(filePath);
             companyDao.insert(company);
         } catch (Exception e) {
@@ -143,5 +147,22 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<Company> findEnable(int valid) {
         return companyDao.selectEnable(valid);
+    }
+
+    @Override
+    public Company findByLoginNameAndPassowrd(String loginName, String password) throws SysuserNotExistException {
+        Company company= companyDao.selectByLoginNameAndPassword(loginName, DigestUtils.md5DigestAsHex(password.getBytes()), Constant.SYSUSER_VALID);
+        if(company!=null){
+            return company;
+        }
+        throw  new SysuserNotExistException("用户名或密码不正确");
+    }
+
+    @Override
+    public int add(Company company) {
+        company.setPassword(DigestUtils.md5DigestAsHex(company.getPassword().getBytes()));
+        company.setCompanyStatus(Constant.VALID);
+        company.setPositionNum(0);
+        return companyDao.insert(company);
     }
 }

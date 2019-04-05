@@ -20,6 +20,34 @@
     <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/zjob.css" />
     <script>
         $(function(){
+            $('#frmAddSysUser').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+
+                },
+                fields: {
+                    loginName: {
+                        validators: {
+                            notEmpty: {
+                                message: '用户名不能为空'
+                            },
+                            remote: {
+                                url: '${pageContext.request.contextPath}/backend/sysuser/checkLoginName'
+                            }
+                        }
+                    },
+                    password: {
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            }
+
+                        }
+                    }
+                }
+            });
             //在页面加载完成后初始化分页条
             $('#pagination').bootstrapPaginator({
 
@@ -53,34 +81,7 @@
                 }
 
             });
-            $('#frmAddSysUser').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
 
-                },
-                fields: {
-                    loginName: {
-                        validators: {
-                            notEmpty: {
-                                message: '用户名不能为空'
-                            },
-                            remote: {
-                                url: '${pageContext.request.contextPath}/backend/sysuser/checkLoginName'
-                            }
-                        }
-                    },
-                    password: {
-                        validators: {
-                            notEmpty: {
-                                message: '密码不能为空'
-                            }
-
-                        }
-                    }
-                }
-            });
 
             $('#frmModifySysUser').bootstrapValidator({
                 feedbackIcons: {

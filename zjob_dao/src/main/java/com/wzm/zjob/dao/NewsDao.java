@@ -22,4 +22,6 @@ public interface NewsDao {
     public News selectById(int id);
 
     public int update(News news);
+
+    public  List<News> selectAllAndEnable(int valid);
 }

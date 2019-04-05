@@ -73,7 +73,16 @@
 	    on n.create_user_id=s.id
         where n.id = #{id}
     </select>
-
+    <select id="selectAllAndEnable" resultMap="NewsMap">
+        select
+        n.id,n.news_title,n.news_content,n.create_date,n.news_status,s.id,s.login_name,s.password,s.is_valid,s.create_date
+        from news n
+        left join sysuser s
+	    on n.create_user_id=s.id
+	    where
+	    n.news_status = #{valid}
+	    order by n.create_date desc
+    </select>
     <update id="update" parameterType="News">
         update news
         <set>

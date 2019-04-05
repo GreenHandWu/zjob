@@ -1,6 +1,7 @@
 package com.wzm.zjob.dao;
 
 import com.wzm.zjob.entity.Position;
+import com.wzm.zjob.params.JobParam;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface PositionDao {
     public Position selectById(int id);
 
     public int update(Position position);
+
+    public List<Position> selectByParams(JobParam jobParam);
 }

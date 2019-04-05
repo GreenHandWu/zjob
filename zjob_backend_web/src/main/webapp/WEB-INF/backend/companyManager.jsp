@@ -45,39 +45,7 @@
                 });
 
             }
-            //在页面加载完成后初始化分页条
-            $('#pagination').bootstrapPaginator({
 
-                //主版本号
-                bootstrapMajorVersion: 3,
-                //当前页
-                currentPage:${data.pageNum},
-                //总页数
-                totalPages:${data.pages},//el表达式取的是对应属性的get方法
-                //分页时用到的url请求
-                //page:当前页
-                pageUrl: function (type, page, current) {
-                    return '${pageContext.request.contextPath}/backend/company/findAllByPage?pageNum=' + page;
-                },
-                itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
-                    switch (type) {
-                        case "first":
-                            return '首页';
-
-                        case "prev":
-                            return '上一页';
-                        case "next":
-                            return '下一页';
-                        case "last":
-                            return '尾页';
-                        case "page":
-                            return page;
-                    }
-
-
-                }
-
-            });
             $('#frmAddCompany').bootstrapValidator({
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
@@ -171,6 +139,42 @@
 
                 }
             });
+
+
+            //在页面加载完成后初始化分页条
+            $('#pagination').bootstrapPaginator({
+
+                //主版本号
+                bootstrapMajorVersion: 3,
+                //当前页
+                currentPage:${data.pageNum},
+                //总页数
+                totalPages:${data.pages},//el表达式取的是对应属性的get方法
+                //分页时用到的url请求
+                //page:当前页
+                pageUrl: function (type, page, current) {
+                    return '${pageContext.request.contextPath}/backend/company/findAllByPage?pageNum=' + page;
+                },
+                itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
+                    switch (type) {
+                        case "first":
+                            return '首页';
+
+                        case "prev":
+                            return '上一页';
+                        case "next":
+                            return '下一页';
+                        case "last":
+                            return '尾页';
+                        case "page":
+                            return page;
+                    }
+
+
+                }
+
+            });
+
 
             $('#frmModifyCompany').bootstrapValidator({
                 feedbackIcons: {
@@ -303,7 +307,7 @@
                     if (result.status == 1) {
                         $('#modifyCompanyId').val(result.obj.id);
                         $('#modifyCompanyName').val(result.obj.companyName);
-                       // $('#modifyCompanyLogo').val(result.obj.companyLogo);
+                        $('#img2').attr('src','${pageContext.request.contextPath}/backend/company/showPic?image='+result.obj.companyLogo);
                         $('#modifyCompanyPerson').val(result.obj.companyPerson);
                         $('#modifyCompanyEmail').val(result.obj.companyEmail);
                         $('#modifyCompanyAddress').val(result.obj.companyAddress);
@@ -411,9 +415,9 @@
                         <td><img
                                 src="${pageContext.request.contextPath}/backend/company/showPic?image=${company.companyLogo}"
                                 alt="" width="40" height="40"></td>
-                        <td>${company.companyAddress}</td>
+                        <td><div style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${company.companyAddress}</div></td>
                         <td>${company.companyType}</td>
-                        <td>${company.companyDesc}</td>
+                        <td><div style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${company.companyDesc}</div></td>
                         <td>${company.companyPhone}</td>
                         <td><fmt:formatDate value="${company.companyCreateDate}" pattern="yyyy-MM-dd"
                                             timeZone="UTC"/></td>

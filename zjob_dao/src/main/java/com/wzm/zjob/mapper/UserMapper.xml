@@ -141,12 +141,25 @@
         set user_status = 1-user_status
         where id=#{id}
     </update>
+    <update id="updatePwd">
+    update user
+    set
+      password = #{newPass,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+    </update>
 
     <delete id="deleteById" parameterType="java.lang.Integer">
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-
+    <select id="selectByLoginNameAndPassword" resultMap="UserMap">
+        select
+        <include refid="User_List"/>
+        FROM
+        user
+        where
+        user_name=#{loginName} and password=#{password} and user_status=#{status}
+    </select>
 
 </mapper>

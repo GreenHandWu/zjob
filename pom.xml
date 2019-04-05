@@ -304,7 +304,7 @@
         <version>4.5.2</version>
       </dependency>
       <!--httpclient  end-->
-
+      <!--excel-->
       <dependency>
         <groupId>org.apache.poi</groupId>
         <artifactId>poi</artifactId>
@@ -314,6 +314,23 @@
         <groupId>org.apache.poi</groupId>
         <artifactId>poi-ooxml</artifactId>
         <version>3.15</version>
+      </dependency>
+      <!--二维码-->
+      <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>3.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>net.glxn</groupId>
+        <artifactId>qrgen</artifactId>
+        <version>1.4</version>
+      </dependency>
+     <!--邮箱-->
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.5.0-b01</version>
       </dependency>
 
     </dependencies>

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.dao.PositionDao;
 import com.wzm.zjob.entity.Position;
+import com.wzm.zjob.params.JobParam;
 import com.wzm.zjob.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,10 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public int modify(Position position) {
         return positionDao.update(position);
+    }
+
+    @Override
+    public List<Position> findByParams(JobParam jobParam) {
+        return positionDao.selectByParams(jobParam);
     }
 }

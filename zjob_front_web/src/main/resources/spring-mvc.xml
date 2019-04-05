@@ -9,13 +9,9 @@
         <!--配置json消息转换器-->
         <mvc:message-converters>
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-
                 <!--将返回值以application/json;charset=utf-8的形式写进response的body中-->
                 <property name="supportedMediaTypes" value="application/json;charset=utf-8"/>
-
-
             </bean>
-
         </mvc:message-converters>
 
     </mvc:annotation-driven>
@@ -25,7 +21,7 @@
         <!--配置视图类-->
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <!--配置前缀-->
-        <property name="prefix" value="/WEB-INF/backend/"/>
+        <property name="prefix" value="/WEB-INF/front/"/>
         <!--配置后缀-->
         <property name="suffix" value=".jsp"/>
 
@@ -46,12 +42,8 @@
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
     <mvc:resources mapping="/images/**" location="/WEB-INF/images/"/>
     <mvc:resources mapping="/fonts/**" location="/WEB-INF/fonts/"/>
-    <mvc:resources mapping="/iconfont/**" location="/WEB-INF/iconfont/"/>
+    <mvc:resources mapping="/bootstrap/**" location="/WEB-INF/bootstrap/"/>
     <mvc:resources mapping="/layer/**" location="/WEB-INF/layer/"/>
-    <mvc:resources mapping="/My97DatePicker/**" location="/WEB-INF/My97DatePicker/"/>
-
-
-
     <!--文件上传-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!--设置每次最大上传的字节数10M-->

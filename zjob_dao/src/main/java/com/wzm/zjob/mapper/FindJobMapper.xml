@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wzm.zjob.dao.FindJobDao">
+    <insert id="insert">
+    insert into findjob (position_id, user_id, is_send, create_time
+      )
+    values (#{positionId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{isSend,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <select id="selectAllByUserId" resultType="com.wzm.zjob.entity.FindJob">
+    select f.position_id as positionId,
+     p.position_name as positionName,
+    p.position_salary as positionSalary,
+    c.id as companyId,
+    c.company_name as companyName,
+    f.is_send as isSend,
+    f.create_time as createDate
+    from findjob f ,company c,position p
+    where f.user_id=#{userId}
+    and  f.position_id = p.id
+    and  p.company_id = c.id
+    order by f.create_time
+    </select>
+
+
+</mapper>

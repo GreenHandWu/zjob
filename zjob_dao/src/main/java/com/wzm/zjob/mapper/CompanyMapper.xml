@@ -193,4 +193,14 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByLoginNameAndPassword" resultMap="CompanyMap">
+        select
+        <include refid="Company_List"/>
+        FROM
+        company
+        where
+        company_name=#{loginName} and password=#{password} and company_status=#{status}
+    </select>
+
 </mapper>

@@ -20,6 +20,55 @@
     <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/zjob.css" />
     <script>
         $(function(){
+
+            //服务器端接收消息
+            let successMsg='${successMsg}';
+            let errorMsg='${errorMsg}';
+            if(successMsg!=''){
+                layer.msg(successMsg,{
+                    time:2000,
+                    skin:'successMsg'
+                });
+
+            }
+            if(errorMsg!=''){
+                layer.msg(errorMsg,{
+                    time:2000,
+                    skin:'successMsg'
+                });
+
+            }
+
+            $('#frmAddNews').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+
+                },
+                fields: {
+                    newsTitle: {
+                        validators: {
+                            notEmpty: {
+                                message: '标题不能为空'
+                            },
+                            remote: {
+                                //ajax后端校验该登录账号是否已经存在
+                                url: '${pageContext.request.contextPath}/backend/news/checkTitle'
+                            }
+                        }
+                    },
+                    newsContent: {
+                        validators: {
+                            notEmpty: {
+                                message: '内容不能为空'
+                            }
+
+                        }
+                    }
+                }
+            });
+
             //在页面加载完成后初始化分页条
             $('#pagination').bootstrapPaginator({
 
@@ -53,35 +102,7 @@
                 }
 
             });
-            $('#frmAddNews').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
 
-                },
-                fields: {
-                    newsTitle: {
-                        validators: {
-                            notEmpty: {
-                                message: '标题不能为空'
-                            },
-                            remote: {
-                                //ajax后端校验该登录账号是否已经存在
-                                url: '${pageContext.request.contextPath}/backend/news/checkTitle'
-                            }
-                        }
-                    },
-                    newsContent: {
-                        validators: {
-                            notEmpty: {
-                                message: '内容不能为空'
-                            }
-
-                        }
-                    }
-                }
-            });
 
             $('#frmModifyNews').bootstrapValidator({
                 feedbackIcons: {
@@ -126,39 +147,6 @@
         //展示添加新闻界面
         function showAddNews() {
             $('#addNews').modal('show');
-        }
-
-        //添加新闻
-        function addNews(){
-
-//进行表单校验
-            let bv = $('#frmAddNews').data('bootstrapValidator');
-            bv.validate();
-            if (bv.isValid()) {
-
-                //调用ajax到后台执行添加用户
-                $.post('${pageContext.request.contextPath}/backend/news/add',
-                    //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
-                    $('#frmAddNews').serialize(), function (result) {
-
-                        if (result.status == 1) {
-                            layer.msg(result.message, {
-                                time: 2000,
-                                skin:'successMsg'
-                            }, function () {
-                                location.href = '${pageContext.request.contextPath}/backend/news/findAllByPage?pageNum='
-                                    +${data.pageNum};
-                            });
-                        }
-                        else if (result.status == 0) {
-                            layer.msg(result.message, {
-                                time: 2000,
-                                skin: 'errorMsg'
-                            });
-                        }
-
-                    });
-            }
         }
 
         //显示修改新闻界面
@@ -333,7 +321,8 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form id="frmAddNews">
+        <form id="frmAddNews" action="${pageContext.request.contextPath}/backend/news/add" method="post">
+            <input type="hidden" name="pageNum" value="${data.pageNum}">
         <div class="modal-content">
             <!-- 头部、主体、脚注 -->
             <div class="modal-header">
@@ -358,7 +347,7 @@
                 <br>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary addNews" onclick="addNews()">添加</button>
+                <input type="submit" class="btn btn-primary addNews" value="添加"></input>
                 <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
             </div>
         </div>

@@ -2,7 +2,6 @@ package com.wzm.zjob.backend.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
-import com.wzm.zjob.Constants.ResponseResult;
 import com.wzm.zjob.entity.Order;
 import com.wzm.zjob.excel.ExcelUtil;
 import com.wzm.zjob.service.OrderService;
@@ -13,9 +12,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @Controller

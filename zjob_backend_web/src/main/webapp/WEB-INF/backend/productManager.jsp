@@ -18,36 +18,6 @@
     <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/zjob.css" />
     <script>
         $(function(){
-            //在页面加载完成后初始化分页条
-            $('#pagination').bootstrapPaginator({
-
-                //主版本号
-                bootstrapMajorVersion: 3,
-                //当前页
-                currentPage:${data.pageNum},
-                //总页数
-                totalPages:${data.pages},//el表达式取的是对应属性的get方法
-                //分页时用到的url请求
-                //page:当前页
-                pageUrl: function (type, page, current) {
-                    return '${pageContext.request.contextPath}/backend/product/findAllByPage?pageNum='+page;
-                },
-                itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
-                    switch (type) {
-                        case "first":
-                            return '首页';
-
-                        case "prev":
-                            return '上一页';
-                        case "next":
-                            return '下一页';
-                        case "last":
-                            return '尾页';
-                        case "page":
-                            return page;
-                    }
-                }
-            });
             $('#frmAddProduct').bootstrapValidator({
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
@@ -99,6 +69,38 @@
                     }
                 }
             });
+
+            //在页面加载完成后初始化分页条
+            $('#pagination').bootstrapPaginator({
+
+                //主版本号
+                bootstrapMajorVersion: 3,
+                //当前页
+                currentPage:${data.pageNum},
+                //总页数
+                totalPages:${data.pages},//el表达式取的是对应属性的get方法
+                //分页时用到的url请求
+                //page:当前页
+                pageUrl: function (type, page, current) {
+                    return '${pageContext.request.contextPath}/backend/product/findAllByPage?pageNum='+page;
+                },
+                itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
+                    switch (type) {
+                        case "first":
+                            return '首页';
+
+                        case "prev":
+                            return '上一页';
+                        case "next":
+                            return '下一页';
+                        case "last":
+                            return '尾页';
+                        case "page":
+                            return page;
+                    }
+                }
+            });
+
             $('#frmModifyProduct').bootstrapValidator({
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',

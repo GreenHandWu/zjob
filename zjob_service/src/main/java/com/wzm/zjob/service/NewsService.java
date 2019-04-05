@@ -17,4 +17,6 @@ public interface NewsService {
     public News findById(int id);
 
     public int modify(News news);
+
+    public PageInfo<News> findAllByPageAndEnable(Integer pageNum, int pageSize, int valid);
 }

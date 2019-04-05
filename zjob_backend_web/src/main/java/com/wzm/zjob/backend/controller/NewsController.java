@@ -1,7 +1,6 @@
 package com.wzm.zjob.backend.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.mysql.cj.Session;
 import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.Constants.ResponseResult;
 import com.wzm.zjob.entity.News;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,19 +61,19 @@ public class NewsController {
 
     //添加新闻
     @RequestMapping("/add")
-    @ResponseBody
-    public ResponseResult add(News news, HttpSession session) {
-
+    public String add(News news, Integer pageNum, HttpSession session, Model model) {
+        System.out.println(pageNum);
         Sysuser sysuser = (Sysuser) session.getAttribute("sysuser");
         news.setCreateDate(dateService.getTime());
         news.setSysuser(sysuser);
         news.setNewsStatus(Constant.VALID);
         System.out.println(news.toString());
         if (newsService.add(news) == 1) {
-            return ResponseResult.success("添加成功");
+            model.addAttribute("successMsg","添加成功");
         } else {
-            return ResponseResult.fail("添加失败");
+            model.addAttribute("errorMsg", "添加失败");
         }
+        return "forward:findAllByPage?pageNum="+pageNum;//转发到findAll请求
 
     }
     @RequestMapping("/deleteById")

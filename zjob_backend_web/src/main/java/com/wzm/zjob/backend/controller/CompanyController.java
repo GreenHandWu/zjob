@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,6 +81,7 @@ public class CompanyController {
         Calendar cal = Calendar.getInstance();
         cal.setTime(companyCreateDate);//date 换成已经已知的Date对象
         cal.add(Calendar.HOUR_OF_DAY, 8);// before 8 hour
+
         companyVo.setCompanyCreateDate(cal.getTime());
         try {
             //将vo中属性值对应的拷贝到dto的相关属性中(属性必须一一对应),获取部分值

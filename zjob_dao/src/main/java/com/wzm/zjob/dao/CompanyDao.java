@@ -8,7 +8,7 @@ import java.util.List;
 public interface CompanyDao {
     public List<Company> selectAll();
 
-    public void insert(Company company);
+    public int insert(Company company);
 
     public List<Company> selectEnable(int valid);
 
@@ -21,4 +21,6 @@ public interface CompanyDao {
     public int deleteById(int id);
 
     public int update(Company company);
+
+    public Company selectByLoginNameAndPassword(@Param("loginName") String loginName,@Param("password") String password, @Param("status") int status);
 }

@@ -8,6 +8,8 @@ import com.wzm.zjob.dto.UserDto;
 import com.wzm.zjob.entity.User;
 import com.wzm.zjob.exception.FileDeleteException;
 import com.wzm.zjob.exception.FileUploadException;
+import com.wzm.zjob.exception.PasswordWrongException;
+import com.wzm.zjob.exception.SysuserNotExistException;
 import com.wzm.zjob.ftp.FtpConfig;
 import com.wzm.zjob.ftp.FtpUtils;
 import com.wzm.zjob.service.UserService;
@@ -35,7 +37,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkUserName(String userName, Integer id) {
-        User user= userDao.selectByUserNameAndId(userName,id);
+        User user;
+        if(null != id){
+            user= userDao.selectByUserNameAndId(userName,id);
+        }else {
+            user=userDao.selectByUserName(userName);
+        }
         if(user!=null){
             return false;
         }
@@ -44,6 +51,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int add(User user) {
+        user.setUserStatus(Constant.VALID);
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         return userDao.insert(user);
     }
 
@@ -139,11 +148,32 @@ public class UserServiceImpl implements UserService {
         user = new User();
         try {
             PropertyUtils.copyProperties(user, userDto);
-            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            if(null!=user.getPassword()){
+                user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            }
             user.setUserResume(filePath);
             userDao.update(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public User findByLoginNameAndPassowrd(String loginName, String password) throws SysuserNotExistException {
+        User user= userDao.selectByLoginNameAndPassword(loginName, DigestUtils.md5DigestAsHex(password.getBytes()), Constant.SYSUSER_VALID);
+        if(user!=null){
+            return user;
+        }
+        throw  new SysuserNotExistException("用户名或密码不正确");
+    }
+
+    @Override
+    public void modifyPwd(Integer id, String oldPass, String newPass) throws PasswordWrongException {
+       if(!userDao.selectById(id).getPassword().equals(DigestUtils.md5DigestAsHex(oldPass.getBytes()))){
+           throw new PasswordWrongException("密码错误");
+       }else {
+           userDao.updatePwd(id,DigestUtils.md5DigestAsHex(newPass.getBytes()));
+       }
+    }
+
 }

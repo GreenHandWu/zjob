@@ -75,4 +75,13 @@ public class NewsServiceImpl implements NewsService {
     public int modify(News news) {
         return newsDao.update(news);
     }
+
+    @Override
+    public PageInfo<News> findAllByPageAndEnable(Integer pageNum, int pageSize, int valid) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<News> newsList = newsDao.selectAllAndEnable(valid);
+
+        PageInfo<News> pageInfo = new PageInfo<>(newsList);
+        return pageInfo;
+    }
 }

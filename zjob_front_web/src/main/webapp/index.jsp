@@ -1,5 +1,7 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<%
+    request.getRequestDispatcher("/showLogin").forward(request,response);
+%>
 </body>
 </html>

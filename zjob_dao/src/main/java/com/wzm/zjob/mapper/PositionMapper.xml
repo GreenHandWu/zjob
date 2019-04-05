@@ -14,6 +14,7 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
         <association property="company" javaType="Company">
             <id property="id" column="company_id"/>
+            <result column="c_id" jdbcType="INTEGER"  property="id"/>
             <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
         </association>
     </resultMap>
@@ -108,6 +109,34 @@
         <include refid="Position_List" />
         from position
         where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByParams"  parameterType="com.wzm.zjob.params.JobParam"   resultMap="PositionMap">
+        select
+        p.id, p.position_name, p.position_salary, p.position_num, p.position_require,
+        p.position_edu, c.id as c_id, p.position_phone, p.status,c.company_name
+        from position p
+        left join company c
+        on p.company_id=c.id
+        <where>
+            <if test="positionName!=null and positionName!=''">
+                and p.position_name like concat(concat('%',#{positionName}),'%')
+            </if>
+            <if test="companyName!=null and companyName!=''">
+                and c.company_name like concat(concat('%',#{companyName}),'%')
+            </if>
+            <if test="positionSalary!=null and positionSalary!=''">
+                and p.position_salary &gt;= #{positionSalary}
+            </if>
+            <if test="positionEdu!=null and positionEdu!=''">
+                and p.position_edu=#{positionEdu}
+            </if>
+            <if test="isValid!=null and isValid!=''">
+                and p.status = #{isValid}
+            </if>
+            <if test="isValid!=null and isValid!=''">
+                and c.company_status=#{isValid}
+            </if>
+        </where>
     </select>
 
     <update id="update" parameterType="Position">

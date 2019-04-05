@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.Constants.ResponseResult;
-import com.wzm.zjob.entity.News;
 import com.wzm.zjob.entity.Sysuser;
 import com.wzm.zjob.exception.SysuserNotExistException;
 import com.wzm.zjob.service.DateService;
