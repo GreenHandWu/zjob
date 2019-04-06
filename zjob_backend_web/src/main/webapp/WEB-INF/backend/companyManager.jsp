@@ -401,7 +401,7 @@
                     <th class="text-center">电话</th>
                     <th class="text-center">创建时间</th>
                     <th class="text-center">企业法人</th>
-                    <th class="text-center">可发布的职位数</th>
+                    <th class="text-center">可发送邮件数</th>
                     <th class="text-center">状态</th>
                     <th class="text-center">操作</th>
                 </tr>

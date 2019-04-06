@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.dao.CompanyDao;
+import com.wzm.zjob.dao.ProductDao;
 import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.Company;
 import com.wzm.zjob.entity.Sysuser;
@@ -25,6 +26,8 @@ import java.util.List;
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyDao companyDao;
+    @Autowired
+    private ProductDao productDao;
     @Autowired
     private FtpConfig ftpConfig;
     @Override
@@ -180,5 +183,12 @@ public class CompanyServiceImpl implements CompanyService {
             throw new PositionNumException("请购买服务");
         }
        companyDao.reducePositionNum(id);
+    }
+
+    @Override
+    public void modifyPositionNum(Integer companyId, Integer productId, Integer positionNum) {
+        Integer positionNumGe = productDao.selectById(productId).getPositionNum();
+        Integer positionNumTotal = positionNumGe*positionNum;
+        companyDao.updatePositionNum(companyId,positionNumTotal);
     }
 }

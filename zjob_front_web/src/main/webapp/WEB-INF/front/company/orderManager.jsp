@@ -74,7 +74,7 @@
                     <th class="text-center">编号</th>
                     <th class="text-center">公司名称</th>
                     <th class="text-center">产品名称</th>
-                    <th class="text-center">邮件服务数量</th>
+                    <th class="text-center">购买数量</th>
                     <th class="text-center">订单金额</th>
                     <th class="text-center">创建日期</th>
                 </tr>

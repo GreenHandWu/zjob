@@ -1,5 +1,6 @@
 package com.wzm.zjob.front.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wzm.zjob.Constants.Constant;
@@ -10,6 +11,7 @@ import com.wzm.zjob.front.vo.CompanyVo;
 import com.wzm.zjob.front.vo.EmailVo;
 import com.wzm.zjob.service.*;
 import com.wzm.zjob.utils.QQMailUtil;
+import com.wzm.zjob.utils.QRCodeUtil;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +20,14 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -41,6 +44,10 @@ public class CompanyController {
     private FindJobService findJobService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private DateService dateService;
     @RequestMapping("checkCompanyName")
     @ResponseBody
     //自动将被校验的值注入
@@ -260,7 +267,7 @@ public class CompanyController {
                 "我们已经通过zjob招聘网查阅了您的简历。在认真阅读及评估您的简历后，我们认为您符合本公司基本条件要求。" +"<br/>"+
                 "为进一步增加双方间的了解，希望您能够前往本公司面试。\n" +"<br/>"+
                 "如因未及时查看通知内容而错过面试时间，请来电另约";
-           // QQMailUtil.QQmail("面试通知",user.getEmail(),context );
+            QQMailUtil.QQmail("面试通知",user.getEmail(),context );
             Integer positionId = emailVo.getPositionId();
                     Integer userId = emailVo.getUserId();
                    Integer IsSend = Constant.VALID;
@@ -271,8 +278,85 @@ public class CompanyController {
         }
     }
 
+    @RequestMapping("/findProductAllByPage")
+    public String findProductAllByPage(Integer pageNum, Model model, HttpSession session) {
+        if (ObjectUtils.isEmpty(pageNum)) {
+            pageNum = Constant.PAGE_NUM;
+        }
+        //调用service获取新闻列表
+        PageInfo<Product> pageInfo = productService.findAllByPage(pageNum, Constant.PAGE_SIZE);
+        //将该列表存入model,相当于request
+        model.addAttribute("data", pageInfo);
+        //返回产品新闻管理视图
+        return "/company/shop";
+    }
 
-    //findProductAllByPage
+    @RequestMapping("/findProductById")
+    @ResponseBody
+    public ResponseResult findProductById(int id) {
+        Product product = productService.findById(id);
+        return  ResponseResult.success(product);
+    }
+    @RequestMapping("/shop")
+    @ResponseBody
+    public String shop(Integer productId,Integer companyId,Integer positionNum,Date createDate) {
+        String url ="productId="+productId+"&companyId="+companyId+"&positionNum="+positionNum+"&createTime="+createDate.getTime();
+        String urlshow = "http://192.168.43.73:9999/zshop_front_web/front/company/createOrder?"+url;
+        System.out.println(urlshow);
+        Random random = new Random();
+        String fileName = String.valueOf(random.nextInt(100));
+        QRCodeUtil.zxingCodeCreate(urlshow,fileName,"D:\\temp\\",250,"D:\\logo.png");
+        return fileName;
+    }
+//    shopQR
+@RequestMapping("/showQR")
+public void showQR(HttpServletRequest request, HttpServletResponse response, String image) throws IOException {
+    // 本地文件路径
+    String filePath = "D:"+ File.separator+"temp"+File.separator+image+".jpg";
+    File file = new File(filePath);
+    // 获取输出流
+    OutputStream outputStream = response.getOutputStream();
+    FileInputStream fileInputStream = new FileInputStream(file);
+    // 读数据
+    byte[] data = new byte[fileInputStream.available()];
+    fileInputStream.read(data);
+    fileInputStream.close();
+    // 回写
+    response.setContentType("image/jpeg;charset=utf-8");
+    outputStream.write(data);
+    outputStream.flush();
+    outputStream.close();
+}
 
+    @RequestMapping("/createOrder")
+    public String createOrder(Integer productId,Integer companyId,Integer positionNum,long createTime) {
+        Date createdate = new Date(createTime);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(createdate);
+        cal.add(Calendar.HOUR, 8);// 24小时制
+        createdate = cal.getTime();
+        orderService.insert(companyId,productId,positionNum,createdate);
+        companyService.modifyPositionNum(companyId,productId,positionNum);
+     return "/company/paysuccess";
+    }
+
+
+    @RequestMapping("/checkOrder")
+    @ResponseBody
+    public String checkOrder(Integer productId,Integer companyId,Integer positionNum,Date createDate) {
+        long a = createDate.getTime();
+        Date createTime = new Date(a);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(createTime);
+        cal.add(Calendar.HOUR, 8);// 24小时制
+        createTime = cal.getTime();
+        int flag = orderService.checkOrder(companyId, productId, positionNum, createTime);
+        System.out.println(flag);
+        if (flag>0){
+            return "success";
+        }else{
+            return "false";
+        }
+    }
 
 }

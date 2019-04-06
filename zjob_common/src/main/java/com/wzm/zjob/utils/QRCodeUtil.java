@@ -39,16 +39,16 @@ public class QRCodeUtil {
      * @param size     生成的二维码图片尺寸 可以自定义或者默认（250）
      * @param logoPath logo的存放位置
      */
-    public static boolean zxingCodeCreate(String content, String path, Integer size, String logoPath) {
+    public static boolean zxingCodeCreate(String content,String fileName, String path, Integer size, String logoPath) {
         try {
             //图片类型
             String imageType = "jpg";
             //获取二维码流的形式，写入到目录文件中
             BufferedImage image = getBufferedImage(content, size, logoPath);
             //获得随机数
-            Random random = new Random();
+          //  Random random = new Random();
             //生成二维码存放文件
-            File file = new File(path+content+".jpg");
+            File file = new File(path+fileName+".jpg");
             if (!file.exists()) {
                 file.mkdirs();
             }

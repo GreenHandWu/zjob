@@ -31,4 +31,6 @@ public interface CompanyService {
     public void modifyPwd(Integer id, String oldPass, String newPass) throws PasswordWrongException;
 
     public void reducePositionNum(Integer id) throws PositionNumException;
+
+    public void modifyPositionNum(Integer companyId, Integer productId, Integer positionNum);
 }

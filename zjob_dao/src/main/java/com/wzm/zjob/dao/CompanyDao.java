@@ -27,4 +27,7 @@ public interface CompanyDao {
     public void updatePwd(@Param("id") Integer id, @Param("newPass") String newPass);
 
     public void reducePositionNum(Integer id);
+
+    public void updatePositionNum(@Param("companyId") Integer companyId,@Param("positionNumTotal") Integer positionNumTotal);
+
 }

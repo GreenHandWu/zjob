@@ -207,6 +207,12 @@
 
 
     </update>
+    <update id="updatePositionNum">
+    update company
+    set
+      position_num = position_num+#{positionNumTotal}
+    where id = #{companyId,jdbcType=INTEGER}
+    </update>
 
     <select id="selectByLoginNameAndPassword" resultMap="CompanyMap">
         select

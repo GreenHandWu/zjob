@@ -20,6 +20,14 @@
     <sql id="Order_List">
     id, company_id, product_id, product_num, order_sum, create_time
   </sql>
+    <insert id="insert">
+     insert into orders (company_id, product_id,
+      product_num, order_sum, create_time
+      )
+    values (#{companyId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
+      #{productNum,jdbcType=INTEGER}, #{orderSum,jdbcType=DOUBLE}, #{createDate,jdbcType=TIMESTAMP}
+      )
+    </insert>
 
     <select id="selectAll" resultMap="OrderMap">
         select
@@ -35,5 +43,14 @@
         where o.company_id = co.id and o.product_id = p.id
         and o.company_id = #{id}
         order by o.create_time desc
+    </select>
+    <select id="selectByParams" resultType="integer">
+        select
+        count(*)
+        from orders
+        where company_id = #{companyId}
+        and product_id = #{productId}
+        and product_num = #{productNum}
+        and create_time = #{createDate}
     </select>
 </mapper>

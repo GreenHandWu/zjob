@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css"/>
     <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/zjob.css" />
     <script>
+        var ck;
         $(function(){
             //在页面加载完成后初始化分页条
             $('#pagination').bootstrapPaginator({
@@ -30,7 +31,7 @@
                 //分页时用到的url请求
                 //page:当前页
                 pageUrl: function (type, page, current) {
-                    return '${pageContext.request.contextPath}/backend/product/findAllByPage?pageNum='+page;
+                    return '${pageContext.request.contextPath}/front/company/findProductAllByPage?pageNum='+page;
                 },
                 itemTexts: function (type, page, current) {//根据type的值，显示对应的分页栏
                     switch (type) {
@@ -48,234 +49,78 @@
                     }
                 }
             });
-            $('#frmAddProduct').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-
-                },
-                fields: {
-                    productName: {
-                        validators: {
-                            notEmpty: {
-                                message: '产品名称不能为空'
-                            },
-                            remote: {
-                                //ajax后端校验该登录账号是否已经存在
-                                url: '${pageContext.request.contextPath}/backend/product/checkProductName'
-                            }
-                        }
-                    },
-                    productPrice: {
-                        validators: {
-                            notEmpty: {
-                                message: '产品价格不能为空'
-                            },
-                            regexp:{
-                                regexp:/^\d+\.\d+$/,
-                                message:'价格必须为小数'
-                            }
-
-                        }
-                    },
-                    positionNum: {
-                        validators: {
-                            notEmpty: {
-                                message: '请输入产品数量'
-                            },
-                            digits: {
-                                message: '请输入数字（整数）'
-                            }
-
-                        }
-                    },
-                    productDesc: {
-                        validators: {
-                            notEmpty: {
-                                message: '产品描述不能为空'
-                            }
-                        }
-                    }
-                }
-            });
-            $('#frmModifyProduct').bootstrapValidator({
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-
-                },
-                fields: {
-                    productName: {
-                        validators: {
-                            notEmpty: {
-                                message: '产品名称不能为空'
-                            },
-                            remote: {
-                                //ajax后端校验该登录账号是否已经存在
-                                url: '${pageContext.request.contextPath}/backend/product/checkProductName',
-                                type: "post",
-                                dataType: "json",
-                                data: {
-                                    productName: function () {
-                                        return $('#modifyProductName').val();
-                                    },
-                                    id: function () {
-                                        return $('#modifyProductId').val();
-                                    }
-                                }
-
-                            }
-                        }
-                    },
-                    productPrice: {
-                        validators: {
-                            notEmpty: {
-                                message: '产品价格不能为空'
-                            },
-                            regexp:{
-                                regexp:/^\d+\.\d+$/,
-                                message:'价格必须为小数'
-                            }
-
-                        }
-                    },
-                    positionNum: {
-                        validators: {
-                            notEmpty: {
-                                message: '请输入产品数量'
-                            },
-                            digits: {
-                                message: '请输入数字（整数）'
-                            }
-                        }
-                    },
-                    productDesc: {
-                        validators: {
-                            notEmpty: {
-                                message: '产品描述不能为空'
-                            }
-                        }
-                    }
-                }
-            });
 
         });
 
-        function showAddProduct() {
-            $('#addProduct').modal('show');
+        function showShopModel(productId,companyId,productName,productPrice) {
+            $("#productId").val(productId);
+            $("#companyId").val(companyId);
+            $("#productName").val(productName);
+            $("#productPrice").val(productPrice);
+            $("#positionNum").val('1');
+            $("#price").val(productPrice);
+            $('#shopModel').modal('show');
         }
-        //添加产品
-        function addProduct(){
-//进行表单校验
-            let bv = $('#frmAddProduct').data('bootstrapValidator');
-            bv.validate();
-            if (bv.isValid()) {
-                //调用ajax到后台执行添加用户
-                $.post('${pageContext.request.contextPath}/backend/product/add',
-                    //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
-                    $('#frmAddProduct').serialize(), function (result) {
+       function checkNum() {
+          var num =  $("#positionNum").val();
+          if(num<=0){
+              alert("购买数量需要大于0");
+              $("#positionNum").val('1');
+              $("#price").val($("#productPrice").val());
+          }else if(num<100){
+          var price = $("#positionNum").val()*$("#productPrice").val();
+           $("#price").val(price);
+          }else{
+              alert("购买数量得在1-100之间");
+              $("#positionNum").val('1');
+              $("#price").val($("#productPrice").val());
+          }
+       }
 
-                        if (result.status == 1) {
-                            layer.msg(result.message, {
-                                time: 2000,
-                                skin:'successMsg'
-                            }, function () {
-                                location.href = '${pageContext.request.contextPath}/backend/product/findAllByPage?pageNum='
-                                    +${data.pageNum};
-                            });
-                        }
-                        else if (result.status == 0) {
-                            layer.msg(result.message, {
-                                time: 2000,
-                                skin: 'errorMsg'
-                            });
-                        }
-
+        function checkOrder() {
+            $.post('${pageContext.request.contextPath}/front/company/checkOrder',
+                //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
+                $('#frmShopProduct').serialize(), function (data) {
+                if(data=="success"){
+                    console.log(data);
+                    $('#showQR').modal('hide');
+                    layer.msg("支付成功", {
+                        time: 2000,
+                        skin: 'successMsg'
                     });
-            }
+                    clearInterval(ck);
+
+                }
+                });
+
+        }
+        function shop(){
+            var createDate = new Date();
+            $("#createDate").val(createDate);
+            $('#shopModel').modal('hide');
+                //调用ajax到后台执行添加用户
+                $.post('${pageContext.request.contextPath}/front/company/shop',
+                    //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
+                    $('#frmShopProduct').serialize(), function (url) {
+                        $('#imgQR').attr('src','${pageContext.request.contextPath}/front/company/showQR?image='+url);
+                        $('#showQR').modal('show');
+                    });
+            ck = setInterval(checkOrder, 3000);
         }
 
-        function showProductModify(id){
-            $.post('${pageContext.request.contextPath}/backend/product/findById',
+        function showProductDetail(id){
+            $.post('${pageContext.request.contextPath}/front/company/findProductById',
                 {'id':id},function(result){
                     //console.log(result);
                     //如果成功，将值写入修改模态框
                     if(result.status==1){
-                        $('#modifyProductId').val(result.obj.id);
-                        $('#modifyProductName').val(result.obj.productName);
-                        $('#modifyProductPrice').val(result.obj.productPrice);
-                        $('#modifyPositionNum').val(result.obj.positionNum);
-                        $('#modifyProductDesc').val(result.obj.productDesc);
-                        $('#modifyProduct').modal('show');
+                        $('#detailProductName').val(result.obj.productName);
+                        $('#detailProductPrice').val(result.obj.productPrice);
+                        $('#detailPositionNum').val(result.obj.positionNum);
+                        $('#detailProductDesc').val(result.obj.productDesc);
+                        $('#detailProduct').modal('show');
                     }
                 });
-        }
-        //修改用户
-        function modifyProduct(){
-            let bv = $('#frmModifyProduct').data('bootstrapValidator');
-            bv.validate();
-            if (bv.isValid()) {
-                //alert(1);
-                //调用ajax到后台执行添加用户
-                $.post('${pageContext.request.contextPath}/backend/product/modify',
-                    //将表单中的元素以key=value的形式序列化，key就是name属性的值，value就是value属性的值
-                    $('#frmModifyProduct').serialize(), function (result) {
-                        if (result.status == 1) {
-                            layer.msg(result.message, {
-                                time: 2000,
-                                skin:'successMsg'
-                            }, function () {
-                                location.href = '${pageContext.request.contextPath}/backend/product/findAllByPage?pageNum='
-                                    +${data.pageNum};
-                            });
-                        }
-                        else if (result.status == 0) {
-                            layer.msg(result.message, {
-                                time: 2000,
-                                skin: 'errorMsg'
-                            });
-                        }
-
-                    });
-            }
-
-        }
-        //显示确认删除产品模态框
-        function showDelModal(id){
-            //alert(id);
-            //将id值存入删除模态框的隐藏域
-            $('#ProductId').val(id);
-            //显示删除模态框
-            $('#delProduct').modal('show');
-
-        }
-
-        //删除新闻
-        function deleteProduct(){
-            $.post('${pageContext.request.contextPath}/backend/product/deleteById',
-                {'id':$('#ProductId').val()},function(result){
-                    if(result.status==1){
-                        layer.msg(result.message,{
-                            time:2000,//2秒钟后隐藏弹出框
-                            skin:'successMsg'//设置弹出框的样式
-                        },function(){
-                            //返回当前页
-                            window.location.href='${pageContext.request.contextPath}/backend/product/findAllByPage?pageNum='+${data.pageNum};
-                        });
-
-                    }
-                    else{
-                        layer.msg(result.message,{
-                            time:2000,
-                            skin:'errorMsg'
-                        });
-                    }
-
-
-                });
-
         }
 
     </script>
@@ -283,37 +128,33 @@
 <body>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">产品管理</h3>
+        <h3 class="panel-title">产品列表</h3>
     </div>
     <div class="panel-body">
-        <input type="button" value="添加产品" class="btn btn-primary" onclick="showAddProduct()">
-        <br>
-        <br>
         <div class="show-list text-center">
             <table class="table table-bordered table-hover" style='text-align: center;'>
                 <thead>
                 <tr class="text-danger">
-                    <th class="text-center">编号</th>
                     <th class="text-center">产品名称</th>
                     <th class="text-center">产品描述</th>
                     <th class="text-center">产品价格</th>
-                    <th class="text-center">职位数量</th>
-                    <th class="text-center">操作</th>
+                    <th class="text-center">邮件发送数量</th>
+                    <th class="text-center">购买</th>
                 </tr>
                 </thead>
                 <tbody id="tb">
                 <c:forEach items="${data.list}" var="product">
                     <tr>
-                        <td>${product.id}</td>
+                        <%--<td>${product.id}</td>--%>
                         <td>${product.productName}</td>
                         <td><div style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${product.productDesc}</div></td>
                         <td>${product.productPrice}</td>
                         <td>${product.positionNum}</td>
                         <td class="text-center">
-                            <input type="button" class="btn btn-warning btn-sm" value="修改"
-                                   onclick="showProductModify(${product.id})">
-                            <input type="button" class="btn btn-warning btn-sm" value="删除"
-                                   onclick="showDelModal(${product.id})">
+                            <input type="button" class="btn btn-warning btn-sm" value="详情"
+                                   onclick="showProductDetail(${product.id})">
+                            <input type="button" class="btn btn-warning btn-sm" value="购买"
+                                   onclick="showShopModel('${product.id}','${company.id}','${product.productName}','${product.productPrice}')">
                         </td>
                     </tr>
                 </c:forEach>
@@ -325,50 +166,54 @@
     </div>
 </div>
 <!-- 添加产品 start -->
-<div class="modal fade" tabindex="-1" id="addProduct" >
+<div class="modal fade" tabindex="-1" id="shopModel" >
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form id="frmAddProduct" method="post" enctype="multipart/form-data" class="form-horizontal" id="frmAddProduct">
+        <form id="frmShopProduct" method="post" class="form-horizontal">
+            <input type="hidden" class="form-control" id="productId" name="productId">
+            <input type="hidden" class="form-control" id="companyId" name="companyId">
+            <input type="hidden" class="form-control" id="createDate" name="createDate">
+
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">添加产品</h4>
+                    <h4 class="modal-title">购买产品</h4>
                 </div>
                 <div class="modal-body text-center">
                     <div class="row text-right">
                         <label for="productName" class="col-sm-4 control-label">产品名称：</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="productName" name="productName">
+                            <input type="text" class="form-control" id="productName" name="productName" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="row text-right">
                         <label for="productPrice" class="col-sm-4 control-label">产品价格：</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="productPrice" name="productPrice">
+                            <input type="text" class="form-control" id="productPrice" name="productPrice" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="positionNum" class="col-sm-4 control-label">职位数量：</label>
+                        <label for="positionNum" class="col-sm-4 control-label">购买数量：</label>
                         <div class=" col-sm-4">
-                            <input type="number" class="form-control" id="positionNum" name="positionNum">
+                            <input type="number" class="form-control" id="positionNum" name="positionNum" onchange="checkNum()">
                         </div>
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="productDesc" class="col-sm-4 control-label">产品描述：</label>
+                        <label for="productDesc" class="col-sm-4 control-label">总价：</label>
                         <div class="col-sm-4">
-                            <textarea class="form-control" rows="8" id="productDesc" name="productDesc"></textarea>
+                            <input type="text" class="form-control" id="price" name="price">
                         </div>
                     </div>
                     <br>
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary addUser" onclick="addProduct()">添加</button>
+                    <input type="button" class="btn btn-primary" onclick="shop()" value="购买"></input>
                     <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
                 </div>
             </div>
@@ -377,7 +222,7 @@
 </div>
 <!-- 添加产品 end -->
 <!-- 修改产品 start -->
-<div class="modal fade" tabindex="-1" id="modifyProduct">
+<div class="modal fade" tabindex="-1" id="detailProduct">
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
@@ -386,81 +231,61 @@
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">修改产品</h4>
+                    <h4 class="modal-title">查看产品</h4>
                 </div>
                 <div class="modal-body text-center">
                     <div class="row text-right">
-                        <label for="modifyProductId" class="col-sm-4 control-label">编号：</label>
+                        <label for="detailProductName" class="col-sm-4 control-label">产品名称：</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="modifyProductId" name="id" readonly>
+                            <input type="text" class="form-control" id="detailProductName" name="productName" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="modifyProductName" class="col-sm-4 control-label">产品名称：</label>
+                        <label for="detailProductPrice" class="col-sm-4 control-label">产品价格：</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="modifyProductName" name="productName">
+                            <input type="text" class="form-control" id="detailProductPrice" name="productPrice" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="modifyProductPrice" class="col-sm-4 control-label">产品价格：</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="modifyProductPrice" name="productPrice">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row text-right">
-                        <label for="modifyPositionNum" class="col-sm-4 control-label">职位数量：</label>
+                        <label for="detailPositionNum" class="col-sm-4 control-label">邮件发送数量：</label>
                         <div class=" col-sm-4">
-                            <input type="number" class="form-control" id="modifyPositionNum" name="positionNum">
+                            <input type="number" class="form-control" id="detailPositionNum" name="positionNum" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="row text-right">
-                        <label for="modifyProductDesc" class="col-sm-4 control-label">产品描述：</label>
+                        <label for="detailProductDesc" class="col-sm-4 control-label">产品描述：</label>
                         <div class="col-sm-4">
-                            <textarea class="form-control" rows="8" id="modifyProductDesc" name="productDesc"></textarea>
+                            <textarea class="form-control" rows="8" id="detailProductDesc" name="productDesc" readonly></textarea>
                         </div>
                     </div>
                     <br>
 
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary addUser" onclick="modifyProduct()">修改</button>
-                    <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<!-- 修改产品 end -->
-<!-- 确认删除产品 start -->
-<div class="modal fade" tabindex="-1" id="delProduct">
-    <input type="hidden" id="ProductId"/>
+<!-- 二维码 end -->
+<div class="modal fade" tabindex="-1" id="showQR">
     <!-- 窗口声明 -->
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <div class="modal-content">
-            <!-- 头部、主体、脚注 -->
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">提示消息</h4>
+            <div class="modal-content">
+                <!-- 头部、主体、脚注 -->
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">扫码付款</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="imgQR"/>
+                </div>
             </div>
-            <div class="modal-body text-center">
-                <h4>确认删除产品吗？</h4>
-
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-warning updateProType" onclick="deleteProduct()">确认</button>
-                <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
-<!-- 确认删除产品 end -->
-
-
-
+<!-- 二维码 end -->
 </body>
 </html>
