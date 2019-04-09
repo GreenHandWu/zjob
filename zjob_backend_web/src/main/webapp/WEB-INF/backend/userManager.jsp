@@ -279,9 +279,8 @@
                             time:2000,
                             skin:'errorMsg'
                         });
+                        $('#delUser').modal('hide');
                     }
-
-
                 });
 
         }

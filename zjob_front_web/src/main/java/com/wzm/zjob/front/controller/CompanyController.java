@@ -301,7 +301,7 @@ public class CompanyController {
     @ResponseBody
     public String shop(Integer productId,Integer companyId,Integer positionNum,Date createDate) {
         String url ="productId="+productId+"&companyId="+companyId+"&positionNum="+positionNum+"&createTime="+createDate.getTime();
-        String urlshow = "http://192.168.43.73:9999/zshop_front_web/front/company/createOrder?"+url;
+        String urlshow = "http://192.168.0.109:9999/zshop_front_web/front/company/createOrder?"+url;
         System.out.println(urlshow);
         Random random = new Random();
         String fileName = String.valueOf(random.nextInt(100));

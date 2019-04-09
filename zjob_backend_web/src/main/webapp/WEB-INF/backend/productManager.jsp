@@ -273,6 +273,7 @@
                             time:2000,
                             skin:'errorMsg'
                         });
+                        $('#delProduct').modal('hide');
                     }
 
 

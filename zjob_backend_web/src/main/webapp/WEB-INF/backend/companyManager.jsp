@@ -350,6 +350,7 @@
                             time: 2000,
                             skin: 'errorMsg'
                         });
+                        $('#delCompany').modal('hide');
                     }
 
 

@@ -78,9 +78,10 @@ public class ProductController {
     @RequestMapping("/deleteById")
     @ResponseBody
     public ResponseResult deleteById(int id) {
-        if(productService.deleteById(id)==1){
-            return  ResponseResult.success("删除成功");}
-        else {
+        try{
+            productService.deleteById(id);
+            return  ResponseResult.success("删除成功");
+        }catch (Exception e){
             return  ResponseResult.fail("删除失败");
         }
     }

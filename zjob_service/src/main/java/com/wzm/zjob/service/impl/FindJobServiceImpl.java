@@ -5,11 +5,13 @@ import com.wzm.zjob.entity.FindJob;
 import com.wzm.zjob.service.FindJobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class FindJobServiceImpl implements FindJobService {
     @Autowired
     private FindJobDao findJobDao;

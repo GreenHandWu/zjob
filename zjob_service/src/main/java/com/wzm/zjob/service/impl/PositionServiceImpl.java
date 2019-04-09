@@ -8,10 +8,12 @@ import com.wzm.zjob.params.JobParam;
 import com.wzm.zjob.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class PositionServiceImpl implements PositionService {
     @Autowired
     private PositionDao positionDao;

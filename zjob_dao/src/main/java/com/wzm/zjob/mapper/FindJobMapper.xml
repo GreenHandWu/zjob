@@ -44,10 +44,9 @@
            f.create_time as createTime
            from findjob f ,user u,position p,company c
            where c.id = #{companyId}
+           and  p.company_id = c.id
            and  f.position_id = p.id
            and  f.user_id = u.id
     order by f.create_time
     </select>
-
-
 </mapper>

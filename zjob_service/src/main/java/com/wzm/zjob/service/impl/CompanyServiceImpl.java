@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@Transactional
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyDao companyDao;
@@ -175,7 +176,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyDao.updatePwd(id,DigestUtils.md5DigestAsHex(newPass.getBytes()));
         }
     }
-    @Transactional
+
     @Override
     public void reducePositionNum(Integer id) throws PositionNumException {
         int i = companyDao.selectById(id).getPositionNum();

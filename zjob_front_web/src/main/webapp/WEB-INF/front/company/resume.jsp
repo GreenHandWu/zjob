@@ -18,7 +18,10 @@
     <script src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zjob.css"/>
+    <script src="${pageContext.request.contextPath}/My97DatePicker/WdatePicker.js"></script>
+
     <script>
+        var btn;
         $(function(){
             //在页面加载完成后初始化分页条
             $('#pagination').bootstrapPaginator({
@@ -52,7 +55,8 @@
             });
         });
         //显示确认删除新闻模态框
-        function showSendEmail(userId,positionName,positionId){
+        function showSendEmail(userId,positionName,positionId,bt){
+            btn = bt;
             //将id值存入删除模态框的隐藏域
             $('#userId').val(userId);
             $('#positionName').val(positionName);
@@ -69,11 +73,19 @@
                             time: 2000,
                             skin: 'successMsg'
                         });
+                        $('#sendEmail').modal('hide');
+
+                       $(btn).val('已发送邮件').removeClass('btn-success').addClass('btn-warning');
+                       // $(btn).removeEventListener('click', showSendEmail);
+                        btn.onclick = null;
+                        btn=null;
+
                     } else{
                         layer.msg(result.message, {
                             time: 2000,
                             skin: 'errorMsg'
                         });
+                        $('#sendEmail').modal('hide');
                     }
 
                 });
@@ -117,7 +129,7 @@
                         <td class="text-center">
                             <c:if test="${user.isSend==0}">
                                 <input type="button" class="btn btn-success btn-sm" value="发送邮件"
-                                       onclick="showSendEmail('${user.userId}','${user.positionName}','${user.positionId}')">
+                                       onclick="showSendEmail('${user.userId}','${user.positionName}','${user.positionId}',this)">
                             </c:if>
                             <c:if test="${user.isSend==1}">
                                 <input type="button" class="btn btn-warning btn-sm" value="已发送邮件">
@@ -152,7 +164,7 @@
                     <div class="row text-right">
                         <label for="time" class="col-sm-4 control-label">面试时间：</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="time" name="time">
+                            <input type="text" class="form-control" id="time" name="time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
                         </div>
                     </div>
                     <br>

@@ -45,6 +45,28 @@
     <mvc:resources mapping="/bootstrap/**" location="/WEB-INF/bootstrap/"/>
     <mvc:resources mapping="/layer/**" location="/WEB-INF/layer/"/>
     <mvc:resources mapping="/My97DatePicker/**" location="/WEB-INF/My97DatePicker/"/>
+
+
+    <!--拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/front/**" />
+            <bean class="com.wzm.zjob.front.interceptor.LoginInterceptor">
+                <property name="passList">
+                    <list>
+                        <value>/showLogin</value>
+                        <value>/front/login</value>
+                        <value>/front/user/registe</value>
+                        <value>/front/user/checkName</value>
+                        <value>/front/user/findJobByParams</value>
+                        <value>/front/company/checkCompanyName</value>
+                        <value>/front/company/registe</value>
+                        <value>/front/company/createOrder</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
     <!--文件上传-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!--设置每次最大上传的字节数10M-->
