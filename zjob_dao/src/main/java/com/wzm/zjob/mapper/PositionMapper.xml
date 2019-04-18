@@ -124,8 +124,11 @@
             <if test="companyName!=null and companyName!=''">
                 and c.company_name like concat(concat('%',#{companyName}),'%')
             </if>
-            <if test="positionSalary!=null and positionSalary!=''">
-                and p.position_salary &gt;= #{positionSalary}
+            <if test="positionSalaryStart!=null and positionSalaryStart!=''">
+                and p.position_salary &gt;= #{positionSalaryStart}
+            </if>
+            <if test="positionSalaryEnd!=null and positionSalaryEnd!=''">
+                and p.position_salary &lt;= #{positionSalaryEnd}
             </if>
             <if test="positionEdu!=null and positionEdu!=''">
                 and p.position_edu=#{positionEdu}

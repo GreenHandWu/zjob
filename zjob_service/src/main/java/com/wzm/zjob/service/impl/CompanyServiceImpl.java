@@ -192,4 +192,14 @@ public class CompanyServiceImpl implements CompanyService {
         Integer positionNumTotal = positionNumGe*positionNum;
         companyDao.updatePositionNum(companyId,positionNumTotal);
     }
+
+    @Override
+    public Company findByCompanyName(String forgetCompanyName) {
+        return companyDao.selectByCompanyName(forgetCompanyName);
+    }
+
+    @Override
+    public void modifyCompanyPassWordBySms(Company company) {
+        companyDao.updatePwd(company.getId(),company.getPassword());
+    }
 }

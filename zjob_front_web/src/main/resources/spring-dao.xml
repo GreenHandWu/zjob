@@ -11,6 +11,7 @@
             <list>
                 <value>classpath:db.properties</value>
                 <value>classpath:ftp.properties</value>
+                <value>classpath:pay.properties</value>
             </list>
         </property>
 

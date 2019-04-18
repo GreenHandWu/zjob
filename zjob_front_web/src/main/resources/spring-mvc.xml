@@ -62,6 +62,7 @@
                         <value>/front/company/checkCompanyName</value>
                         <value>/front/company/registe</value>
                         <value>/front/company/createOrder</value>
+                        <value>/sms</value>
                     </list>
                 </property>
             </bean>

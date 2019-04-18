@@ -30,4 +30,5 @@ public interface CompanyDao {
 
     public void updatePositionNum(@Param("companyId") Integer companyId,@Param("positionNumTotal") Integer positionNumTotal);
 
+    public Company selectByCompanyName(String companyName);
 }

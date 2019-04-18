@@ -9,6 +9,8 @@ import com.wzm.zjob.dto.CompanyDto;
 import com.wzm.zjob.entity.*;
 import com.wzm.zjob.front.vo.CompanyVo;
 import com.wzm.zjob.front.vo.EmailVo;
+import com.wzm.zjob.ftp.FtpConfig;
+import com.wzm.zjob.pay.PayConfig;
 import com.wzm.zjob.service.*;
 import com.wzm.zjob.utils.QQMailUtil;
 import com.wzm.zjob.utils.QRCodeUtil;
@@ -48,6 +50,8 @@ public class CompanyController {
     private ProductService productService;
     @Autowired
     private DateService dateService;
+    @Autowired
+    private PayConfig payConfig;
     @RequestMapping("checkCompanyName")
     @ResponseBody
     //自动将被校验的值注入
@@ -284,7 +288,7 @@ public class CompanyController {
             pageNum = Constant.PAGE_NUM;
         }
         //调用service获取新闻列表
-        PageInfo<Product> pageInfo = productService.findAllByPage(pageNum, Constant.PAGE_SIZE);
+        PageInfo<Product> pageInfo = productService.findAllByPageValid(pageNum, Constant.PAGE_SIZE);
         //将该列表存入model,相当于request
         model.addAttribute("data", pageInfo);
         //返回产品新闻管理视图
@@ -301,7 +305,7 @@ public class CompanyController {
     @ResponseBody
     public String shop(Integer productId,Integer companyId,Integer positionNum,Date createDate) {
         String url ="productId="+productId+"&companyId="+companyId+"&positionNum="+positionNum+"&createTime="+createDate.getTime();
-        String urlshow = "http://192.168.0.109:9999/zshop_front_web/front/company/createOrder?"+url;
+        String urlshow = payConfig.getPayAddress()+":"+payConfig.getPayPort()+"/zshop_front_web/front/company/createOrder?"+url;
         System.out.println(urlshow);
         Random random = new Random();
         String fileName = String.valueOf(random.nextInt(100));

@@ -85,5 +85,13 @@ public class ProductController {
             return  ResponseResult.fail("删除失败");
         }
     }
-
+    @RequestMapping("/modifyStatus")
+    @ResponseBody
+    public ResponseResult modifyStatus(int id) {
+        if(productService.modifyStatus(id)==1){
+            return  ResponseResult.success("更新产品状态成功");}
+        else {
+            return  ResponseResult.fail("更新产品状态失败");
+        }
+    }
 }

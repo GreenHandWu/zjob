@@ -176,4 +176,14 @@ public class UserServiceImpl implements UserService {
        }
     }
 
+    @Override
+    public User findByUserName(String forgetUserName) {
+        return userDao.selectByUserName(forgetUserName);
+    }
+
+    @Override
+    public void modifyUserPassWordBySms(User user) {
+        userDao.updatePwd(user.getId(),user.getPassword());
+    }
+
 }

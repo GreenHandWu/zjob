@@ -63,7 +63,7 @@
                     //console.log(result);
                     //如果成功，将值写入修改模态框
                     if(result.status==1){
-                        $('#newsTitle').val(result.obj.newsTitle);
+                        $('#newsTitle').text(result.obj.newsTitle);
                         $('#newsContent').text(result.obj.newsContent);
                         $('#showNews').modal('show');
                     }
@@ -119,14 +119,14 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="row text-right">
-                        <div class="col-sm-4">
-                            <strong><span id="newsTitle">sdsds</span></strong>
+                        <div class="col-sm-10" style="text-align: center">
+                            <strong><span id="newsTitle"></span></strong>
                         </div>
                     </div>
                     <br>
                     <div class="modal-body text-center">
                         <div class="row text-right">
-                            <div class="col-sm-4">
+                            <div class="col-sm-10" style="text-align: left">
                                 <span id="newsContent"></span>
                             </div>
                         </div>

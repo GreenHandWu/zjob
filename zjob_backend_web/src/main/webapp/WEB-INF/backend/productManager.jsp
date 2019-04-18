@@ -280,7 +280,24 @@
                 });
 
         }
+        //更新状态
+        function modifyStatus(id, btn) {
+            //alert(id);
+            $.post('${pageContext.request.contextPath}/backend/product/modifyStatus',
+                {'id': id}, function () {
+                    //异步局部刷新页面
+                    //找到该点击的按钮的父元素的上一个元素
+                    let $td = $(btn).parent().prev();
+                    if ($td.text().trim() == '启用') {
+                        $td.text('禁用');
+                        $(btn).val('启用').removeClass('btn-danger').addClass('btn-success');
 
+                    } else {
+                        $td.text('启用');
+                        $(btn).val('禁用').removeClass('btn-success').addClass('btn-danger');
+                    }
+                });
+        }
     </script>
 </head>
 <body>
@@ -301,6 +318,7 @@
                     <th class="text-center">产品描述</th>
                     <th class="text-center">产品价格</th>
                     <th class="text-center">邮件服务数量</th>
+                    <th class="text-center">状态</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -312,11 +330,23 @@
                         <td><div style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${product.productDesc}</div></td>
                         <td>${product.productPrice}</td>
                         <td>${product.positionNum}</td>
+                        <td>
+                            <c:if test="${product.productStatus==1}">启用</c:if>
+                            <c:if test="${product.productStatus==0}">禁用</c:if>
+                        </td>
                         <td class="text-center">
                             <input type="button" class="btn btn-warning btn-sm" value="修改"
                                    onclick="showProductModify(${product.id})">
                             <input type="button" class="btn btn-warning btn-sm" value="删除"
                                    onclick="showDelModal(${product.id})">
+                            <c:if test="${product.productStatus==1}">
+                                <input type="button" class="btn btn-danger btn-sm" value="禁用"
+                                       onclick="modifyStatus(${product.id},this)">
+                            </c:if>
+                            <c:if test="${product.productStatus==0}">
+                                <input type="button" class="btn btn-success btn-sm" value="启用"
+                                       onclick="modifyStatus(${product.id},this)">
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

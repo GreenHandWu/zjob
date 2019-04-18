@@ -5,7 +5,8 @@ public class JobParam {
 
     private String companyName;
 
-    private Double positionSalary;
+    private Double positionSalaryStart;
+    private Double positionSalaryEnd;
 
     private String positionEdu;
 
@@ -27,12 +28,20 @@ public class JobParam {
         this.companyName = companyName;
     }
 
-    public Double getPositionSalary() {
-        return positionSalary;
+    public Double getPositionSalaryStart() {
+        return positionSalaryStart;
     }
 
-    public void setPositionSalary(Double positionSalary) {
-        this.positionSalary = positionSalary;
+    public void setPositionSalaryStart(Double positionSalaryStart) {
+        this.positionSalaryStart = positionSalaryStart;
+    }
+
+    public Double getPositionSalaryEnd() {
+        return positionSalaryEnd;
+    }
+
+    public void setPositionSalaryEnd(Double positionSalaryEnd) {
+        this.positionSalaryEnd = positionSalaryEnd;
     }
 
     public String getPositionEdu() {

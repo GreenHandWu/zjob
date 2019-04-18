@@ -6,6 +6,8 @@ import com.wzm.zjob.entity.Product;
 public interface ProductService {
     public PageInfo<Product> findAllByPage(Integer pageNum, int pageSize);
 
+    public PageInfo<Product> findAllByPageValid(Integer pageNum, int pageSize);
+
     public boolean checkProductName(String productName, Integer id);
 
     public int add(Product product);
@@ -15,4 +17,6 @@ public interface ProductService {
     public int modify(Product product);
 
     public int deleteById(int id);
+
+    public int modifyStatus(int id);
 }

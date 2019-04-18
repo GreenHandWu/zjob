@@ -187,10 +187,16 @@
                         <input type="text" class="form-control" id="search-companyName" placeholder="请输入公司名称" name="companyName"
                                value="${jobParam.companyName}">
                     </div>
+                    <br/>
+                    <br/>
+
                     <div class="form-group">
                         <label for="search-positionSalary">薪资:</label>
-                        <input type="text" class="form-control" id="search-positionSalary" placeholder="请输入薪资" name="positionSalary"
-                               value="${jobParam.positionSalary}">
+                        <input type="text" class="form-control" id="search-positionSalaryStart" placeholder="请输入最低薪资" name="positionSalaryStart"
+                               value="${jobParam.positionSalaryStart}">
+                        -
+                        <input type="text" class="form-control" id="search-positionSalaryEnd" placeholder="请输入最高薪资" name="positionSalaryEnd"
+                               value="${jobParam.positionSalaryEnd}">
                     </div>
                     <div class="form-group">
                         <label for="role">学历要求</label>

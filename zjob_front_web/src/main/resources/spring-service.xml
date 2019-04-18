@@ -8,6 +8,7 @@
        <context:component-scan base-package="com.wzm.zjob.service.impl"/>
        <!--扫描ftp包，让其能够识别对应注解-->
        <context:component-scan base-package="com.wzm.zjob.ftp"/>
+       <context:component-scan base-package="com.wzm.zjob.pay"/>
        <!--声明事务-->
        <!--配置事务管理器-->
        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

@@ -121,9 +121,9 @@ public class CompanyController {
     @ResponseBody
     public ResponseResult modifyStatus(int id) {
         if(companyService.modifyStatus(id)==1){
-            return  ResponseResult.success("更新新闻状态成功");}
+            return  ResponseResult.success("更新公司状态成功");}
         else {
-            return  ResponseResult.fail("更新新闻状态失败");
+            return  ResponseResult.fail("更新公司状态失败");
         }
     }
 

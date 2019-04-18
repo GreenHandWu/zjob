@@ -222,5 +222,13 @@
         where
         company_name=#{loginName} and password=#{password} and company_status=#{status}
     </select>
+    <select id="selectByCompanyName" resultMap="CompanyMap">
+        select
+        <include refid="Company_List"/>
+        FROM
+        company
+        where
+        company_name=#{companyName}
+    </select>
 
 </mapper>

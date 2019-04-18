@@ -8,6 +8,8 @@ import java.util.List;
 public interface ProductDao {
     public List<Product> selectAll();
 
+    public List<Product> selectAllValid(int valid);
+
     public Product selectByTitleAndId(@Param("productName") String productName, @Param("id") Integer id);
 
     public int insert(Product product);
@@ -17,4 +19,6 @@ public interface ProductDao {
     public int update(Product product);
 
     public int deleteById(int id);
+
+    public int updateStatus(int id);
 }

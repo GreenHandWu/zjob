@@ -2,6 +2,7 @@ package com.wzm.zjob.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.wzm.zjob.Constants.Constant;
 import com.wzm.zjob.dao.ProductDao;
 import com.wzm.zjob.entity.Product;
 import com.wzm.zjob.service.ProductService;
@@ -20,6 +21,14 @@ public class ProductServiceImpl implements ProductService {
     public PageInfo<Product> findAllByPage(Integer pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Product> productList = productDao.selectAll();
+        PageInfo<Product> pageInfo = new PageInfo<>(productList);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<Product> findAllByPageValid(Integer pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Product> productList = productDao.selectAllValid(Constant.VALID);
         PageInfo<Product> pageInfo = new PageInfo<>(productList);
         return pageInfo;
     }
@@ -51,5 +60,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int deleteById(int id) {
         return productDao.deleteById(id);
+    }
+
+    @Override
+    public int modifyStatus(int id) {
+        return productDao.updateStatus(id);
     }
 }

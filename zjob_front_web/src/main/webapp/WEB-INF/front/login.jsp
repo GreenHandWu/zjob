@@ -27,6 +27,8 @@
             src="<%=request.getContextPath()%>/js/zjob.js"></script>
     <link rel="stylesheet" type="text/css"
           href="<%=request.getContextPath()%>/css/verify.css">
+    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zjob.css"/>
     <script>
         $(function(){
                     //使用bootstrap校验框架校验表单
@@ -63,7 +65,17 @@
                                         }
                                     }
                                 },
-
+                                email: {
+                                    validators: {
+                                        notEmpty: {
+                                            message: '电子邮箱不能为空'
+                                        },
+                                        regexp: {
+                                            regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ ,
+                                            message: '请输入正确的邮箱地址'
+                                        }
+                                    }
+                                },
                                 password: {
                                     validators: {
                                         notEmpty: {//判断是否为空
@@ -125,7 +137,17 @@
                                         }
                                     }
                                 },
-
+                                companyEmail: {
+                                    validators: {
+                                        notEmpty: {
+                                            message: '电子邮箱不能为空'
+                                        },
+                                        regexp: {
+                                            regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/ ,
+                                            message: '请输入正确的邮箱地址'
+                                        }
+                                    }
+                                },
                                 password: {
                                     validators: {
                                         notEmpty: {//判断是否为空
@@ -166,7 +188,144 @@
                             }
                         });
 
+            $('#frmUserForgetPassWord').bootstrapValidator(
+                        {
+                            message: 'This value is not valid',
+                            feedbackIcons: {
+                                valid: 'glyphicon glyphicon-ok',
+                                invalid: 'glyphicon glyphicon-remove',
+                                validating: 'glyphicon glyphicon-refresh'
+                            },
+                            fields: {
+                                userName: {//和表单元素中对应的name一致
+                                    message: '用户名验证失败',
+                                    validators: {
+                                        notEmpty: {//判断是否为空
+                                            message: '用户名不能为空'
+                                        },
+                                        stringLength: {//判断长度是否3-10位
+                                            min: 3,
+                                            max: 10,
+                                            message: '用户名长度必须3-10位'
 
+                                        },
+                                        //判断字符是否是数字，字母，下划线
+                                        regexp: {
+                                            regexp: /^[0-9a-zA-Z_]+$/,
+                                            message: '用户名必须是字母，数字，下划线'
+                                        }
+                                    }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {//判断是否为空
+                                    message: '密码不能为空'
+                                },
+                                //校验密码不能和账号相同
+                                different: {
+                                    field: 'userName',//需要比较的属性
+                                    message: '密码不能和用户名相同'
+                                }
+
+                            }
+
+                        },
+                        repassword: {
+                            validators: {
+                                notEmpty: {//判断是否为空
+                                    message: '确认密码不能为空'
+                                },
+                                //校验确认密码必须和登录密码相同
+                                identical: {
+                                    field: 'password',
+                                    message: '两次输入的密码不一致'
+                                }
+                            }
+
+                        },
+                        verificationCode: {
+                            validators: {
+                                notEmpty: {//判断是否为空
+                                    message: '验证码不能为空'
+                                },
+                                stringLength: {//判断长度是否3-10位
+                                    min: 6,
+                                    max: 6,
+                                    message: '验证码必须6位'
+                                },
+                                numeric: {
+                                    message: '验证码必须为数字'
+                                }
+
+                            }
+
+                        }
+                    }
+                });
+            $('#forgetCompanyName').bootstrapValidator(
+                {
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        companyName: {//和表单元素中对应的name一致
+                            validators: {
+                                notEmpty: {//判断是否为空
+                                    message: '公司名称不能为空'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {//判断是否为空
+                                    message: '密码不能为空'
+                                },
+                                //校验密码不能和账号相同
+                                different: {
+                                    field: 'userName',//需要比较的属性
+                                    message: '密码不能和用户名相同'
+                                }
+
+                            }
+
+                        },
+                        repassword: {
+                            validators: {
+                                notEmpty: {//判断是否为空
+                                    message: '确认密码不能为空'
+                                },
+                                //校验确认密码必须和登录密码相同
+                                identical: {
+                                    field: 'password',
+                                    message: '两次输入的密码不一致'
+                                }
+                            }
+
+                        },
+
+                        verificationCode: {
+                            validators: {
+                                 notEmpty: {//判断是否为空
+                                 message: '验证码不能为空'
+                                 },
+                                stringLength: {//判断长度是否3-10位
+                                    min: 6,
+                                    max: 6,
+                                    message: '验证码必须6位'
+                                },
+                                numeric: {
+                                     message: '验证码必须为数字'
+                                }
+
+                            }
+
+                        }
+
+                    }
+                });
                     $('#username').on(
                         'blur',
                         function () {
@@ -347,6 +506,25 @@
                         }).tooltip('show');
                     }
 
+            //服务器端接收消息
+            let successMsg = '${successMsg}';
+            let errorMsg = '${errorMsg}';
+            if (successMsg != '') {
+                layer.msg(successMsg, {
+                    time: 2000,
+                    skin: 'successMsg'
+                });
+
+            }
+            if (errorMsg != '') {
+                layer.msg(errorMsg, {
+                    time: 2000,
+                    skin: 'successMsg'
+                });
+
+            }
+
+
                     //将该错误提示框在2秒后自动消失
                     $('[data-toggle="tooltip"]').each(function (i) {
                         //alert(i);
@@ -362,6 +540,67 @@
 
                     });
                 });
+
+        //发送验证码
+        function sendUserVerificationCode(btn){
+            $.post('${pageContext.request.contextPath}/sms/sendUserVerificationCode',
+                {'forgetUserName':$('#forgetUserName').val()},function(result){
+                    //console.log(result.message);
+                    if(result.status==1){
+                        let time=60;
+                        let timer=setInterval(function(){
+                            if(time>0){
+                                //将按钮禁用
+                                $(btn).attr('disabled',true);
+                                //重新修改按钮上的文字
+                                $(btn).html('重新发送('+time+')');
+                                //时间--1
+                                time--;
+                            }
+                            else{
+                                //alert(result.message);
+                                //将按钮启用
+                                $(btn).attr('disabled',false);
+                                $(btn).html('重新发送');
+                                //停用计数器
+                                clearInterval(timer);
+                            }
+                        },1000);
+                    }else {
+                        alert(result.message);
+                    }
+                });
+        }
+        //发送验证码
+        function sendCompanyVerificationCode(btn){
+            $.post('${pageContext.request.contextPath}/sms/sendUserVerificationCode',
+                {'forgetCompanyName':$('#forgetCompanyName').val()},function(result){
+                    //console.log(result.message);
+                    if(result.status==1){
+                        let time=60;
+                        let timer=setInterval(function(){
+                            if(time>0){
+                                //将按钮禁用
+                                $(btn).attr('disabled',true);
+                                //重新修改按钮上的文字
+                                $(btn).html('重新发送('+time+')');
+                                //时间--1
+                                time--;
+                            }
+                            else{
+                                alert(result.message);
+                                //将按钮启用
+                                $(btn).attr('disabled',false);
+                                $(btn).html('重新发送');
+                                //停用计数器
+                                clearInterval(timer);
+                            }
+                        },1000);
+                    }else {
+                        alert(result.message);
+                    }
+                });
+        }
     </script>
 
 
@@ -417,14 +656,15 @@
                     <div class="col-sm-9 padding-left-0">
                         <div class="col-sm-4">
                             <button type="button" id="check-btn"
-                                    class="btn btn-primary btn-block">登&nbsp;&nbsp;陆
+                                    class="btn btn-primary btn-block">登&nbsp;&nbsp;录
                             </button>
                         </div>
                         <div class="col-sm-4">
                             <button type="reset" class="btn btn-primary btn-block">重&nbsp;&nbsp;置</button>
                         </div>
                         <div class="col-sm-4">
-                            <button type="button" class="btn btn-link btn-block">忘记密码？</button>
+                            <button type="button" class="btn btn-link btn-block"
+                                    data-toggle="modal" data-target="#forgetPassworldModal">忘记密码？</button>
                         </div>
                     </div>
                 </div>
@@ -457,6 +697,12 @@
                         <label class="col-sm-3 control-label">用户名：</label>
                         <div class="col-sm-6">
                             <input class="form-control" type="text" placeholder="请输入用户名" name="userName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">邮箱：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" placeholder="请输入邮箱" name="email">
                         </div>
                     </div>
                     <div class="form-group">
@@ -505,6 +751,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">邮箱：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" placeholder="请输入邮箱" name="companyEmail">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
                         <div class="col-sm-6">
                             <input class="form-control" type="password" placeholder="请输入密码" name="password">
@@ -537,6 +789,111 @@
     </div>
 </div>
 <!-- 注册模态框 end  -->
+<!-- 忘记密码模态框 start  -->
+<div class="modal fade" id="forgetPassworldModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <!-- 普通用户 start -->
+        <div class="modal-content" id="login-account-m">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">普通用户忘记密码</h4>
+            </div>
+            <form class="form-horizontal" method="post" id="frmUserForgetPassWord" action="${pageContext.request.contextPath}/sms/modifyUserPsw">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" placeholder="请输入用户名" name="userName" id="forgetUserName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">新密码：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="password" placeholder="请输入新密码" name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">确认密码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="password" placeholder="请输入确认密码" name="repassword">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">验证码：</label>
+                        <div class="col-sm-3">
+                            <input class="form-control" type="text" placeholder="请输入验证码" name="verificationCode">
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="pass-item-timer" type="button" onclick="sendUserVerificationCode(this)">发送验证码</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">
+                        关&nbsp;&nbsp;闭
+                    </button>
+                    <button type="submit" class="btn btn-warning">提&nbsp;&nbsp;交</button> &nbsp;&nbsp;
+                    <a class="btn-link" style="cursor:pointer" id="btn-sms-back-m">企业用户忘记密码</a>
+                </div>
+            </form>
+        </div>
+        <!-- 普通用户 end -->
+        <!-- 企业用户 start -->
+        <div class="modal-content" id="login-sms-m" style="display: none;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">企业用户忘记密码</h4>
+            </div>
+            <form class="form-horizontal" action="${pageContext.request.contextPath}/sms/modifyCompanyPsw" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">公司名称：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" placeholder="请输入公司名称" name="companyName" id="forgetCompanyName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="password" placeholder="请输入密码" name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">确认密码</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" type="password" placeholder="请输入确认密码" name="repassword">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">验证码：</label>
+                        <div class="col-sm-3">
+                            <input class="form-control" type="text" placeholder="请输入验证码" name="verificationCode">
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="pass-item-timer" onclick="sendCompanyVerificationCode(this)">发送验证码</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">
+                        关&nbsp;&nbsp;闭
+                    </button>
+                    <button type="submit" class="btn btn-warning">提&nbsp;&nbsp;交</button> &nbsp;&nbsp;
+                    <a class="btn-link" id="btn-account-back-m" style="cursor:pointer">普通用户忘记密码</a>
+                </div>
+            </form>
+        </div>
+        <!-- 企业用户 end -->
+    </div>
+</div>
+<!-- 忘记密码模态框 end  -->
+
+
+
+
+
 
 
 <script>

@@ -9,9 +9,10 @@
         <result column="product_desc" jdbcType="VARCHAR" property="productDesc"/>
         <result column="product_price" jdbcType="DOUBLE" property="productPrice"/>
         <result column="position_num" jdbcType="INTEGER" property="positionNum"/>
+        <result column="product_status" jdbcType="INTEGER" property="productStatus"/>
     </resultMap>
     <sql id="Product_List">
-    id, product_name, product_desc, product_price, position_num
+    id, product_name, product_desc, product_price, position_num, product_status
     </sql>
     <select id="selectAll" resultMap="ProductMap">
         select
@@ -77,6 +78,14 @@
         from product
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectAllValid" resultMap="ProductMap">
+
+        select
+        <include refid="Product_List"/>
+        from product
+        where product_status = #{valid}
+
+    </select>
     <update id="update" parameterType="Product">
         update product
         <set>
@@ -94,6 +103,11 @@
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateStatus">
+        update product
+        set product_status = 1-product_status
+        where id=#{id}
     </update>
     <delete id="deleteById" parameterType="java.lang.Integer">
     delete from product

@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="zjob_backend_web" />
         <module name="zjob_common" />
-        <module name="zjob_dao" />
+        <module name="zjob_service" />
+        <module name="zjob_backend_web" />
         <module name="zjob_front_web" />
         <module name="zjob_pojo" />
-        <module name="zjob_service" />
+        <module name="zjob_dao" />
       </profile>
     </annotationProcessing>
   </component>

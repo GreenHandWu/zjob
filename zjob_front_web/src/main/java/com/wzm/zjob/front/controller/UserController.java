@@ -151,12 +151,13 @@ public class UserController {
     @RequestMapping("/download")
     public void download(String fileName, String userName,
                          HttpServletResponse response) throws IOException {
+
         String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
         URL url = new URL(fileName);
         URLConnection urlConnection = url.openConnection();
         InputStream is = urlConnection.getInputStream();
-
         response.addHeader("Content-Disposition", "attachment;filename=" + userName + "." + suffix);
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("multipart/form-data");
         BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
         //创建缓冲字节流

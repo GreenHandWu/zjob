@@ -393,8 +393,6 @@
                         <td>${position.positionEdu}</td>
                         <td>${position.company.companyName}</td>
                         <td>${position.positionPhone}</td>
-
-
                         <td>
                             <c:if test="${position.status==1}">启用</c:if>
                             <c:if test="${position.status==0}">禁用</c:if>

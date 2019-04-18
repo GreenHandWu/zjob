@@ -13,6 +13,8 @@ public class Product implements Serializable {
 
     private Integer positionNum;
 
+    private Integer productStatus;
+
     public Integer getId() {
         return id;
     }
@@ -51,6 +53,14 @@ public class Product implements Serializable {
 
     public void setPositionNum(Integer positionNum) {
         this.positionNum = positionNum;
+    }
+
+    public Integer getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(Integer productStatus) {
+        this.productStatus = productStatus;
     }
 
     @Override

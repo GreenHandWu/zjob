@@ -33,4 +33,8 @@ public interface CompanyService {
     public void reducePositionNum(Integer id) throws PositionNumException;
 
     public void modifyPositionNum(Integer companyId, Integer productId, Integer positionNum);
+
+    public Company findByCompanyName(String forgetCompanyName);
+
+    public void modifyCompanyPassWordBySms(Company company);
 }

@@ -5,6 +5,9 @@
     <file type="web" url="file://$PROJECT_DIR$/zjob_backend_web" />
     <file type="web" url="file://$PROJECT_DIR$/zjob_front_web" />
   </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>

@@ -30,4 +30,8 @@ public interface UserService {
     public User findByLoginNameAndPassowrd(String loginName, String password) throws SysuserNotExistException;
 
     public void modifyPwd(Integer id, String oldPass, String newPass) throws PasswordWrongException;
+
+    public User findByUserName(String forgetUserName);
+
+    public void modifyUserPassWordBySms(User user);
 }
